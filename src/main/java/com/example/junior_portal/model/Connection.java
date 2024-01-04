@@ -14,11 +14,13 @@ public class Connection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user1_id")
-    private Long user1Id;
+    @JoinColumn(name = "user1_id")
+    @ManyToOne
+    private User user1Id;
 
-    @Column(name = "user2_id")
-    private Long user2Id;
+    @ManyToOne
+    @JoinColumn(name = "user2_id")
+    private User user2Id;
 
     @Enumerated
     private ConnectionType connectionType;

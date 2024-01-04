@@ -15,11 +15,13 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sender_id")
-    private Long senderId;
+    @JoinColumn(name = "sender_id")
+    @ManyToOne
+    private User senderId;
 
-    @Column(name = "receiver_id")
-    private Long receiverId;
+    @JoinColumn(name = "receiver_id")
+    @ManyToOne
+    private User receiverId;
 
     @Column(name = "content")
     private String content;

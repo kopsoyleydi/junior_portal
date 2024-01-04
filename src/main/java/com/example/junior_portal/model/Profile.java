@@ -1,6 +1,5 @@
 package com.example.junior_portal.model;
 
-import com.example.junior_portal.bodies.University;
 import jakarta.persistence.*;
 import lombok.Data;
 
