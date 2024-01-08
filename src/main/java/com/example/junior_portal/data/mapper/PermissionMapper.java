@@ -2,17 +2,36 @@ package com.example.junior_portal.data.mapper;
 
 import com.example.junior_portal.dtos.dto.PermissionDto;
 import com.example.junior_portal.model.Permission;
-import org.mapstruct.Mapper;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface PermissionMapper {
-    PermissionDto toDto(Permission permission);
+@Configuration
+public class PermissionMapper {
+    public PermissionDto toDto(Permission permission){
+        PermissionDto permissionDto = new PermissionDto();
+        permissionDto.setId(permission.getId());
+        permissionDto.setRoleName(permission.getRoleName());
+        return permissionDto;
+    };
 
-    Permission toModel(PermissionDto permissionDto);
+    public Permission toModel(PermissionDto permissionDto){
+        Permission permission = new Permission();
+        permission.setId(permission.getId());
+        permission.setRoleName(permissionDto.getRoleName());
+        return permission;
+    };
 
-    List<PermissionDto> toDtoList(List<Permission> list);
+    public List<PermissionDto> toDtoList(List<Permission> permissionList) {
+        return permissionList.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
-    List<Permission> toModelList(List<PermissionDto> list);
+    public List<Permission> toModelList(List<PermissionDto> permissionDtoList) {
+        return permissionDtoList.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
 }
