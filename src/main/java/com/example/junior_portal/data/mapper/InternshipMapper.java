@@ -2,17 +2,42 @@ package com.example.junior_portal.data.mapper;
 
 import com.example.junior_portal.dtos.dto.InternshipDto;
 import com.example.junior_portal.model.Internship;
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface InternshipMapper {
-    InternshipDto toDto(Internship internship);
+@Component
+public class InternshipMapper {
+    public InternshipDto toDto(Internship internship){
+        InternshipDto internshipDto = new InternshipDto();
+        internshipDto.setId(internshipDto.getId());
+        internshipDto.setDescription(internship.getDescription());
+        internshipDto.setTitle(internship.getTitle());
+        internshipDto.setStartDate(internship.getStartDate());
+        internshipDto.setEndDate(internship.getEndDate());
+        return internshipDto;
+    };
 
-    Internship toModel(InternshipDto internshipDto);
+    public Internship toModel(InternshipDto internshipDto){
+        Internship internship = new Internship();
+        internship.setId(internshipDto.getId());
+        internship.setDescription(internshipDto.getDescription());
+        internship.setTitle(internshipDto.getTitle());
+        internship.setStartDate(internshipDto.getStartDate());
+        internship.setEndDate(internshipDto.getEndDate());
+        return internship;
+    };
 
-    List<InternshipDto> toDtoList(List<Internship> list);
+    public List<InternshipDto> toDtoList(List<Internship> internships) {
+        return internships.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
-    List<Internship> toModelList(List<InternshipDto> list);
+    public List<Internship> toModelList(List<InternshipDto> internshipDtos) {
+        return internshipDtos.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
 }

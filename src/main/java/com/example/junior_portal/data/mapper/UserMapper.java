@@ -2,18 +2,47 @@ package com.example.junior_portal.data.mapper;
 
 import com.example.junior_portal.dtos.dto.UserDto;
 import com.example.junior_portal.model.User;
-import org.mapstruct.Mapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
+@Component
+@RequiredArgsConstructor
+public class UserMapper {
 
-    UserDto toDto(User user);
+    private final PermissionMapper permissionMapper;
 
-    User toModel(UserDto userDto);
+    public UserDto toDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setUsername(user.getUsername());
+        userDto.setPermissions(permissionMapper.toDtoList(user.getPermissions()));
+        return userDto;
+    };
 
-    List<UserDto> toDtoList(List<User> list);
+    public User toModel(UserDto userDto){
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setUsername(userDto.getUsername());
+        user.setPermissions(permissionMapper.toModelList(userDto.getPermissions()));
+        return user;
+    };
 
-    List<User> toModelList(List<UserDto> list);
+    public List<UserDto> toDtoList(List<User> users) {
+        return users.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> toModelList(List<UserDto> userDtos) {
+        return userDtos.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
 }
