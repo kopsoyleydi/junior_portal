@@ -1,19 +1,17 @@
 package com.example.junior_portal.data.mapper.chat;
 
-import com.example.junior_portal.data.mapper.UserMapper;
-import com.example.junior_portal.dtos.dto.ChatMessageDto;
+import com.example.junior_portal.dtos.dto.chat.ChatMessageDto;
 import com.example.junior_portal.model.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
 public class ChatMessageMapper {
 
-    private final UserMapper userMapper;
 
     public ChatMessageDto toDto(ChatMessage chatMessage){
         ChatMessageDto chatMessageDto = new ChatMessageDto();

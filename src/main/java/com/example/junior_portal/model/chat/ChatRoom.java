@@ -1,11 +1,15 @@
 package com.example.junior_portal.model.chat;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "chat_rooms")
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ChatRoom {
 
     @Id
