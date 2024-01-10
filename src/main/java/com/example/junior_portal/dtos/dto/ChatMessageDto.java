@@ -1,28 +1,22 @@
 package com.example.junior_portal.dtos.dto;
 
-import com.example.junior_portal.model.User;
-import com.example.junior_portal.util.LocalDateTimeConverter;
-import jakarta.persistence.Convert;
-import jakarta.persistence.ManyToOne;
+import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
 public class ChatMessageDto {
 
     private Long id;
-
-    @ManyToOne
-    private UserDto senderId;
-
-    @ManyToOne
-    private UserDto receiverId;
-
+    private Long chatId;
+    private Long senderId;
+    private Long recipientId;
+    private String senderName;
+    private String recipientName;
     private String content;
-
-    @Convert(converter = LocalDateTimeConverter.class)
-    private Timestamp timestamp;
+    private Date timestamp;
+    private MessageStatus status;
 }

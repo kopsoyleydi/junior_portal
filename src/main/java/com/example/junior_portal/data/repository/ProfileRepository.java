@@ -10,8 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     @Query(value = "SELECT p from Profile p where p.userId.email = :email")

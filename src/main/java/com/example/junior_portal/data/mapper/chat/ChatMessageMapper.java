@@ -1,7 +1,8 @@
-package com.example.junior_portal.data.mapper;
+package com.example.junior_portal.data.mapper.chat;
 
+import com.example.junior_portal.data.mapper.UserMapper;
 import com.example.junior_portal.dtos.dto.ChatMessageDto;
-import com.example.junior_portal.model.ChatMessage;
+import com.example.junior_portal.model.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,8 +19,11 @@ public class ChatMessageMapper {
         ChatMessageDto chatMessageDto = new ChatMessageDto();
         chatMessageDto.setId(chatMessage.getId());
         chatMessageDto.setContent(chatMessage.getContent());
-        chatMessageDto.setSenderId(userMapper.toDto(chatMessage.getSenderId()));
-        chatMessageDto.setReceiverId(userMapper.toDto(chatMessage.getReceiverId()));
+        chatMessageDto.setSenderId(chatMessage.getSenderId());
+        chatMessageDto.setRecipientId(chatMessage.getRecipientId());
+        chatMessageDto.setSenderName(chatMessage.getSenderName());
+        chatMessageDto.setRecipientName(chatMessage.getRecipientName());
+        chatMessageDto.setStatus(chatMessage.getStatus());
         chatMessageDto.setTimestamp(chatMessage.getTimestamp());
         return chatMessageDto;
     };
@@ -28,8 +32,11 @@ public class ChatMessageMapper {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setId(chatMessageDto.getId());
         chatMessage.setContent(chatMessageDto.getContent());
-        chatMessage.setSenderId(userMapper.toModel(chatMessageDto.getSenderId()));
-        chatMessage.setReceiverId(userMapper.toModel(chatMessageDto.getReceiverId()));
+        chatMessage.setSenderId(chatMessageDto.getSenderId());
+        chatMessage.setRecipientId(chatMessageDto.getRecipientId());
+        chatMessage.setSenderName(chatMessageDto.getSenderName());
+        chatMessage.setRecipientName(chatMessageDto.getRecipientName());
+        chatMessage.setStatus(chatMessageDto.getStatus());
         chatMessage.setTimestamp(chatMessageDto.getTimestamp());
         return chatMessage;
     };

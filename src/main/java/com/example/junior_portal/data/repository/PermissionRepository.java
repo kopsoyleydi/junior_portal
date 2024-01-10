@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 }
