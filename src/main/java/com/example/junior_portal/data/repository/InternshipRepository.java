@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Transactional
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface InternshipRepository extends JpaRepository<Internship, Long> {
+    Internship findAllById(Long id);
 }

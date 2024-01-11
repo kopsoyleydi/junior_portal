@@ -23,6 +23,9 @@ public class Internship {
     @Column(name = "start_date")
     private String startDate;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @Column(name = "end_date")
     private String endDate;
 }

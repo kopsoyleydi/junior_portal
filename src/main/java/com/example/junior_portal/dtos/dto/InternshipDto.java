@@ -15,4 +15,6 @@ public class InternshipDto {
     private String startDate;
 
     private String endDate;
+
+    private Boolean active;
 }

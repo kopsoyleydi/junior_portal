@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Transactional
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findAllByEmail(String email);
+    User findByEmail(String email);
 }

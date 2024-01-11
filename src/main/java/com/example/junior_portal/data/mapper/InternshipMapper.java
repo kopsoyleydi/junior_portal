@@ -12,6 +12,7 @@ public class InternshipMapper {
     public InternshipDto toDto(Internship internship){
         InternshipDto internshipDto = new InternshipDto();
         internshipDto.setId(internshipDto.getId());
+        internshipDto.setActive(internship.getActive());
         internshipDto.setDescription(internship.getDescription());
         internshipDto.setTitle(internship.getTitle());
         internshipDto.setStartDate(internship.getStartDate());
@@ -21,6 +22,7 @@ public class InternshipMapper {
 
     public Internship toModel(InternshipDto internshipDto){
         Internship internship = new Internship();
+        internship.setActive(internshipDto.getActive());
         internship.setId(internshipDto.getId());
         internship.setDescription(internshipDto.getDescription());
         internship.setTitle(internshipDto.getTitle());
