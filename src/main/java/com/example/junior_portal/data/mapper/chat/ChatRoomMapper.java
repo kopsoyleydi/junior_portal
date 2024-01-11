@@ -1,8 +1,6 @@
 package com.example.junior_portal.data.mapper.chat;
 
-import com.example.junior_portal.dtos.dto.chat.ChatMessageDto;
 import com.example.junior_portal.dtos.dto.chat.ChatRoomDto;
-import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

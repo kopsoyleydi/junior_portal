@@ -1,7 +1,6 @@
 package com.example.junior_portal.data.repository;
 
 import com.example.junior_portal.model.chat.ChatMessage;
-import com.example.junior_portal.model.chat.ChatRoom;
 import com.example.junior_portal.model.chat.MessageStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

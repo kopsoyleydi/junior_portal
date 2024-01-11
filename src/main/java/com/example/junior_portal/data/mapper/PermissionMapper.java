@@ -2,12 +2,12 @@ package com.example.junior_portal.data.mapper;
 
 import com.example.junior_portal.dtos.dto.PermissionDto;
 import com.example.junior_portal.model.Permission;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration
+@Component
 public class PermissionMapper {
     public PermissionDto toDto(Permission permission){
         PermissionDto permissionDto = new PermissionDto();

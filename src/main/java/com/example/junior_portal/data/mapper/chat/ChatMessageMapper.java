@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatMessageMapper {
 
-
     public ChatMessageDto toDto(ChatMessage chatMessage){
         ChatMessageDto chatMessageDto = new ChatMessageDto();
         chatMessageDto.setId(chatMessage.getId());
