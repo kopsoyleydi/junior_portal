@@ -33,7 +33,7 @@ public class ChatMessageInterImpl implements ChatMessageRepoInter {
 
     @Override
     public List<ChatMessage> findChatMessages(Long senderId, Long recipientId) {
-         ChatRoom chat = chatRoomInter.getChatId(senderId, recipientId);
+         ChatRoom chat = chatRoomInter.getChatRoom(senderId, recipientId);
          Long chatId = chat.getChatId();
         List<ChatMessage> messages =
                 chatMessageRepository.findByChatId(chatId);
