@@ -18,8 +18,7 @@ public class ChatRoomInterImpl implements ChatRoomRepoInter {
     private final ChatRepository chatRepository;
 
     @Override
-    public ChatRoom getChatRoom(
-            Long senderId, Long recipientId) {
+    public ChatRoom getChatRoom(Long senderId, Long recipientId) {
         ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
 
         Long chatId = chatRepository.maxId();

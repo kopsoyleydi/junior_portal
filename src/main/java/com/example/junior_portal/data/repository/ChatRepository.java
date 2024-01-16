@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-    @Query(value = "select max(s.id) from Chat s")
+    @Query(value = "select max(s.id) from ChatRoom s")
     Long maxId();
 }
