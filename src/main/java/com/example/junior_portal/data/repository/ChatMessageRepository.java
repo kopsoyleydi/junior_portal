@@ -17,15 +17,15 @@ import java.util.List;
 @Transactional
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
-    long countBySenderIdAndRecipientIdAndStatus(
+    List<ChatMessage> countBySenderIdAndRecipientIdAndStatus(
             Long senderId, Long recipientId, MessageStatus status);
 
     List<ChatMessage> findByChatId(Long chatId);
 
     @Modifying
     @Query("UPDATE ChatMessage c SET c.status = :status WHERE c.senderId = :senderId AND c.recipientId = :recipientId")
-    void updateStatusBySenderIdAndRecipientId(@Param("status") MessageStatus status,
-                                              @Param("senderId") Long senderId,
-                                              @Param("recipientId") Long recipientId);
+    void updateStatusBySenderIdAndRecipientId(MessageStatus status,
+                                              Long senderId,
+                                              Long recipientId);
 
 }

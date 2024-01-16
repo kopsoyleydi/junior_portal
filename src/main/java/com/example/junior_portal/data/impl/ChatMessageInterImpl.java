@@ -26,7 +26,7 @@ public class ChatMessageInterImpl implements ChatMessageRepoInter {
     }
 
     @Override
-    public long countNewMessages(Long senderId, Long recipientId) {
+    public List<ChatMessage> countNewMessages(Long senderId, Long recipientId) {
         return chatMessageRepository
                 .countBySenderIdAndRecipientIdAndStatus(senderId, recipientId, MessageStatus.RECEIVED);
     }

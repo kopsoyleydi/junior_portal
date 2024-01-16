@@ -3,6 +3,7 @@ package com.example.junior_portal.model.chat;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -27,7 +28,7 @@ public class ChatMessage {
     @Column(name = "content")
     private String content;
     @Column(name = "timestamp")
-    private Date timestamp;
+    private Instant timestamp;
     @Column(name = "status")
     private MessageStatus status;
 }
