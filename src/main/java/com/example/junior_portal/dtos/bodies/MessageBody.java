@@ -9,8 +9,6 @@ import java.util.Date;
 @Setter
 public class MessageBody {
 
-    private Long chatId;
-
     private String senderEmail;
 
     private String recipientEmail;

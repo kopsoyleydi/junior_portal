@@ -1,12 +1,14 @@
 package com.example.junior_portal.model.chat;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ChatNotification {
-    private String id;
-    private String senderId;
+    private Long id;
+    private Long senderId;
     private String senderName;
 }
