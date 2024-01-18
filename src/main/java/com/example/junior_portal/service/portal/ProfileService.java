@@ -44,4 +44,18 @@ public class ProfileService {
                     .build();
         }
     }
+
+    private CommonResponse changeProfile(ProfileDto profileDto){
+        try {
+            return CommonResponse.builder()
+                    .answer( profileRepoInter.changeProfile(profileMapper.toModel(profileDto)))
+                    .status(HttpStatus.OK)
+                    .message("Profile change successfully").build();
+        }
+        catch (Exception e){
+            return CommonResponse.builder()
+                    .status(HttpStatus.valueOf(501))
+                    .message("Something went wrong").build();
+        }
+    }
 }
