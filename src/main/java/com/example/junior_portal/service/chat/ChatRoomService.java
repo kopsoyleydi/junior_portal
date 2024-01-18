@@ -4,12 +4,16 @@ import com.example.junior_portal.data.impl.inter.ChatRoomRepoInter;
 import com.example.junior_portal.dtos.bodies.CreateRoom;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
-public class ChatRoom {
+@Slf4j
+public class ChatRoomService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
@@ -26,7 +30,7 @@ public class ChatRoom {
                     .build();
         }
         catch (Exception e){
-            e.getStackTrace();
+            log.info("Service: ChatRoomService, create room method");
             return CommonResponse.builder()
                     .message("Something newt wrong").status(HttpStatus.valueOf(501))
                     .build();

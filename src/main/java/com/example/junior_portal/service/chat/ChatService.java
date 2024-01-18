@@ -14,6 +14,7 @@ import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
 import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService {
 
     private final ChatMessageRepoInter chatMessageInter;
@@ -60,6 +62,7 @@ public class ChatService {
             return CommonResponse.builder().message("Message send successfully").status(HttpStatus.CREATED).build();
         }
         catch (Exception e){
+            log.info("Service: ChatService, method: addNewMessages");
             return CommonResponse.builder().message("Something went wrong").status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
@@ -90,6 +93,7 @@ public class ChatService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: ChatService, method: countNewMessages");
             return CommonResponse.builder()
                     .message("Something went wrong").status(HttpStatus.valueOf(501)).build();
         }
@@ -107,6 +111,8 @@ public class ChatService {
                     .status(HttpStatus.OK).build();
         }
         catch (Exception e){
+            log.info("Service: ChatService, method: findChatMessages");
+            e.getStackTrace();
             return CommonResponse.builder()
                     .answer("No messages")
                     .message("Something new wrong")
@@ -123,6 +129,7 @@ public class ChatService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: ChatService, method: updateStatuses");
             return CommonResponse.builder()
                     .message("Something went wrong").status(HttpStatus.valueOf(501))
                     .build();
