@@ -12,6 +12,7 @@ import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
+import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -110,6 +111,21 @@ public class ChatService {
                     .answer("No messages")
                     .message("Something new wrong")
                     .status(HttpStatus.valueOf(501)).build();
+        }
+    }
+
+    private CommonResponse updateStatuses(Long senderId, Long recipientId, MessageStatus messageStatus){
+        try {
+            chatMessageInter.updateStatuses(senderId, recipientId, messageStatus);
+            return CommonResponse.builder()
+                    .message("Message status updated").status(HttpStatus.OK)
+                    .build();
+        }
+        catch (Exception e){
+            e.getStackTrace();
+            return CommonResponse.builder()
+                    .message("Something went wrong").status(HttpStatus.valueOf(501))
+                    .build();
         }
     }
 
