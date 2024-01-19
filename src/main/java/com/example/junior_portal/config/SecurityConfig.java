@@ -7,10 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -29,25 +35,20 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    @Autowired private CorsFilterConfig corsFilterConfigc;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.exceptionHandling().accessDeniedPage("/403-page");
 
         AuthenticationManagerBuilder builder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(userService()).passwordEncoder(passwordEncoder());
 
-        http.cors().disable().authorizeHttpRequests()
-                .requestMatchers("/api").authenticated().requestMatchers("/api/**").authenticated()
-                .dispatcherTypeMatchers(HttpMethod.valueOf("/user")).authenticated()
-                .requestMatchers("/admin").hasRole("ADMIN").requestMatchers("/admin/**").hasRole("ADMIN")
-                .shouldFilterAllDispatcherTypes(true).anyRequest().permitAll()
-                .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        http.logout()
-                .logoutUrl("/sign-out"); // post request to /sign-out
-
-        http.csrf().disable().cors();
+        http
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                        authorizationManagerRequestMatcherRegistry.requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN").anyRequest().authenticated())
+                .authenticationManager(builder.build())
+                .addFilter(jwtRequestFilter).build();
 
         return http.build();
     }

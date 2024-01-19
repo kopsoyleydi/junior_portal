@@ -1,66 +1,52 @@
 package com.example.junior_portal.filter;
 
 import com.example.junior_portal.util.JwtTokenUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtTokenUtil jwtUtil;
-    private final ObjectMapper mapper;
+    private final JwtTokenUtil jwtTokenUtils;
 
-    public JwtRequestFilter(JwtTokenUtil jwtUtil, ObjectMapper mapper) {
-        this.jwtUtil = jwtUtil;
-        this.mapper = mapper;
-    }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> errorDetails = new HashMap<>();
-
-        try {
-            String accessToken = jwtUtil.resolveToken(request);
-            if (accessToken == null ) {
-                filterChain.doFilter(request, response);
-                return;
+        String authHeader = request.getHeader("Authorization");
+        String username = null;
+        String jwt = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
+            try {
+                username = jwtTokenUtils.extractUsername(jwt);
+            } catch (ExpiredJwtException e) {
+                log.debug("Время жизни токена вышло");
+            } catch (SignatureException e) {
+                log.debug("Подпись неправильная");
             }
-            System.out.println("token : "+accessToken);
-            Claims claims = jwtUtil.resolveClaims(request);
-
-            if(claims != null & jwtUtil.validateClaims(claims)){
-                String email = claims.getSubject();
-                Collection<GrantedAuthority> authorities = new ArrayList<>();
-
-                String roles = claims.get("role",String.class);
-                authorities.add(new SimpleGrantedAuthority(roles));
-
-                System.out.println("email : "+email);
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(email,null,authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-
-        }catch (Exception e){
-            errorDetails.put("message", "Authentication Error");
-            errorDetails.put("details",e.getMessage());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            mapper.writeValue(response.getWriter(), errorDetails);
-
+        }
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    jwtTokenUtils.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+            );
+            SecurityContextHolder.getContext().setAuthentication(token);
         }
         filterChain.doFilter(request, response);
     }

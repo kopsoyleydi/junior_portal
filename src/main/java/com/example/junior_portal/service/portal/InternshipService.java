@@ -5,12 +5,14 @@ import com.example.junior_portal.data.mapper.InternshipMapper;
 import com.example.junior_portal.dtos.dto.InternshipDto;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InternshipService {
 
     private final InternshipRepoInter internshipRepoInter;
@@ -30,6 +32,7 @@ public class InternshipService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: InternshipService, method: createInternship");
             return CommonResponse.builder()
                     .message("Something went wrong")
                     .status(HttpStatus.valueOf(501))
@@ -49,6 +52,7 @@ public class InternshipService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: InternshipService, method: getInternshipById");
             return CommonResponse.builder()
                     .message("Something went wrong")
                     .status(HttpStatus.valueOf(501))
@@ -65,9 +69,10 @@ public class InternshipService {
         }
         catch (Exception e){
             e.getStackTrace();
-             return CommonResponse.builder()
+            log.info("Service: InternshipService, method: getAllInternships");
+            return CommonResponse.builder()
                     .answer("Something went wrong")
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.valueOf(501))
                      .build();
         }
 
@@ -86,6 +91,7 @@ public class InternshipService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: InternshipService, method: changeInternship");
             return CommonResponse.builder()
                     .message("Something went wrong")
                     .status(HttpStatus.valueOf(501))
@@ -104,6 +110,7 @@ public class InternshipService {
         }
         catch (Exception e){
             e.getStackTrace();
+            log.info("Service: InternshipService, method: changeStatusForInternship");
             return CommonResponse.builder()
                     .message("Something went wrong")
                     .status(HttpStatus.valueOf(501))
