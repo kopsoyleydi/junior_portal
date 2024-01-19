@@ -8,11 +8,11 @@ import com.example.junior_portal.data.mapper.chat.ChatMessageMapper;
 import com.example.junior_portal.dtos.bodies.FindMessage;
 import com.example.junior_portal.dtos.bodies.MessageBody;
 import com.example.junior_portal.dtos.bodies.NewMessage;
+import com.example.junior_portal.dtos.bodies.UpdateStatuses;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
-import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class ChatService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
-    public CommonResponse processMessaging(@Payload MessageBody messageBody){
+    private CommonResponse processMessaging(MessageBody messageBody){
         ChatMessage chatMessage = setterChatMessage(messageBody);
         chatMessage.setChatId(chatRoomRepoInter
                 .getChatRoom(chatMessage.getSenderId(), chatMessage.getRecipientId()).getChatId());
@@ -120,9 +120,9 @@ public class ChatService {
         }
     }
 
-    private CommonResponse updateStatuses(Long senderId, Long recipientId, MessageStatus messageStatus){
+    private CommonResponse updateStatuses(UpdateStatuses updateStatuses){
         try {
-            chatMessageInter.updateStatuses(senderId, recipientId, messageStatus);
+            chatMessageInter.updateStatuses(updateStatuses.getSenderId(), updateStatuses.getRecipientId(), updateStatuses.getMessageStatus());
             return CommonResponse.builder()
                     .message("Message status updated").status(HttpStatus.OK)
                     .build();
@@ -134,6 +134,22 @@ public class ChatService {
                     .message("Something went wrong").status(HttpStatus.valueOf(501))
                     .build();
         }
+    }
+
+    public CommonResponse getProcessMessaging(@Payload MessageBody messageBody){
+        return processMessaging(messageBody);
+    }
+
+    public CommonResponse getCountNewMessages(@Payload NewMessage newMessage){
+        return countNewMessages(newMessage);
+    }
+
+    public CommonResponse getFindChatMessages(@Payload FindMessage findMessage){
+        return findChatMessages(findMessage);
+    }
+
+    public CommonResponse setUpdateStatuses(@Payload UpdateStatuses updateStatuses){
+        return updateStatuses(updateStatuses);
     }
 
 }

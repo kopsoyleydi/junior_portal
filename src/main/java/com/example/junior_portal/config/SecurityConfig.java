@@ -35,7 +35,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    @Autowired private CorsFilterConfig corsFilterConfigc;
+    @Autowired private CorsFilterConfig corsFilterConfig;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

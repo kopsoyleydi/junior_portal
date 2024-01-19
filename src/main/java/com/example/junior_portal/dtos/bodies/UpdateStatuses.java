@@ -1,16 +1,14 @@
 package com.example.junior_portal.dtos.bodies;
 
-import lombok.AllArgsConstructor;
+import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class NewMessage {
+public class UpdateStatuses {
+
     private Long senderId;
-    
     private Long recipientId;
+    private MessageStatus messageStatus;
 }
