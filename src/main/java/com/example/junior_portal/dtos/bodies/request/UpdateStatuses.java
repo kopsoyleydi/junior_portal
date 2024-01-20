@@ -1,4 +1,4 @@
-package com.example.junior_portal.dtos.bodies;
+package com.example.junior_portal.dtos.bodies.request;
 
 import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.Getter;

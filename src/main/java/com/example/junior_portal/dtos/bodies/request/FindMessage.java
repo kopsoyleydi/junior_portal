@@ -1,4 +1,4 @@
-package com.example.junior_portal.dtos.bodies;
+package com.example.junior_portal.dtos.bodies.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewMessage {
+public class FindMessage {
     private Long senderId;
-    
+
     private Long recipientId;
 }

@@ -1,10 +1,9 @@
 package com.example.junior_portal.service.chat;
 
 import com.example.junior_portal.data.impl.inter.ChatRoomRepoInter;
-import com.example.junior_portal.dtos.bodies.CreateRoom;
+import com.example.junior_portal.dtos.bodies.request.CreateRoom;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

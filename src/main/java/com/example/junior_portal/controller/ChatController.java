@@ -1,9 +1,9 @@
 package com.example.junior_portal.controller;
 
-import com.example.junior_portal.dtos.bodies.FindMessage;
-import com.example.junior_portal.dtos.bodies.MessageBody;
-import com.example.junior_portal.dtos.bodies.NewMessage;
-import com.example.junior_portal.dtos.bodies.UpdateStatuses;
+import com.example.junior_portal.dtos.bodies.request.FindMessage;
+import com.example.junior_portal.dtos.bodies.request.MessageBody;
+import com.example.junior_portal.dtos.bodies.request.NewMessage;
+import com.example.junior_portal.dtos.bodies.request.UpdateStatuses;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;

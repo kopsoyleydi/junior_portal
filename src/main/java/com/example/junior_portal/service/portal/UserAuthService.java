@@ -1,8 +1,8 @@
 package com.example.junior_portal.service.portal;
 
-import com.example.junior_portal.dtos.bodies.AuthRequest;
-import com.example.junior_portal.dtos.bodies.JwtResponse;
-import com.example.junior_portal.dtos.bodies.RegistrationBody;
+import com.example.junior_portal.dtos.bodies.request.AuthRequest;
+import com.example.junior_portal.dtos.bodies.response.JwtResponse;
+import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
 import com.example.junior_portal.exception.AppError;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;

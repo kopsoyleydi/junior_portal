@@ -5,10 +5,10 @@ import com.example.junior_portal.data.impl.inter.ChatMessageRepoInter;
 import com.example.junior_portal.data.impl.inter.ChatRoomRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.mapper.chat.ChatMessageMapper;
-import com.example.junior_portal.dtos.bodies.FindMessage;
-import com.example.junior_portal.dtos.bodies.MessageBody;
-import com.example.junior_portal.dtos.bodies.NewMessage;
-import com.example.junior_portal.dtos.bodies.UpdateStatuses;
+import com.example.junior_portal.dtos.bodies.request.FindMessage;
+import com.example.junior_portal.dtos.bodies.request.MessageBody;
+import com.example.junior_portal.dtos.bodies.request.NewMessage;
+import com.example.junior_portal.dtos.bodies.request.UpdateStatuses;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.ChatMessage;
@@ -16,7 +16,6 @@ import com.example.junior_portal.model.chat.ChatNotification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +44,8 @@ public class ChatService {
 
         ChatMessage saved = chatMessageInter.create(chatMessage);
 
-        messagingTemplate.convertAndSendToUser(String.valueOf(chatMessage.getRecipientId()), "/queue/messages",
+        messagingTemplate.convertAndSendToUser(String.valueOf(
+                chatMessage.getRecipientId()), "/queue/messages",
                 new ChatNotification(saved.getId(), saved.getSenderId(), saved.getSenderName()));
 
         return CommonResponse.builder()
@@ -58,10 +58,14 @@ public class ChatService {
         try {
             ChatMessage chatMessage = setterChatMessage(messageBody);
             chatMessageInter.create(chatMessage);
-            return CommonResponse.builder().message("Message send successfully").status(HttpStatus.CREATED).build();
+            return CommonResponse.builder()
+                    .message("Message send successfully")
+                    .status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             log.info("Service: ChatService, method: addNewMessages");
-            return CommonResponse.builder().message("Something went wrong").status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return CommonResponse.builder()
+                    .message("Something went wrong")
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
     }
@@ -118,7 +122,10 @@ public class ChatService {
 
     public CommonResponse updateStatuses(UpdateStatuses updateStatuses) {
         try {
-            chatMessageInter.updateStatuses(updateStatuses.getSenderId(), updateStatuses.getRecipientId(), updateStatuses.getMessageStatus());
+            chatMessageInter.updateStatuses(
+                    updateStatuses.getSenderId(),
+                    updateStatuses.getRecipientId(),
+                    updateStatuses.getMessageStatus());
             return CommonResponse.builder()
                     .message("Message status updated").status(HttpStatus.OK)
                     .build();

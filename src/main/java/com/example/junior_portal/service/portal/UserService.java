@@ -2,8 +2,8 @@ package com.example.junior_portal.service.portal;
 
 import com.example.junior_portal.data.impl.inter.PermissionRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
-import com.example.junior_portal.dtos.bodies.AuthRequest;
-import com.example.junior_portal.dtos.bodies.RegistrationBody;
+import com.example.junior_portal.dtos.bodies.request.AuthRequest;
+import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
 import com.example.junior_portal.model.Permission;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;

@@ -1,4 +1,4 @@
-package com.example.junior_portal.dtos.bodies;
+package com.example.junior_portal.dtos.bodies.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
