@@ -18,7 +18,7 @@ public class ProfileService {
 
     private final ProfileMapper profileMapper;
 
-    private CommonResponse createProfile(ProfileDto profileDto){
+    public CommonResponse createProfile(ProfileDto profileDto){
         try {
             return CommonResponse.builder()
                     .message("Profile created")
@@ -32,7 +32,7 @@ public class ProfileService {
         }
     }
 
-    private CommonResponse getProfileByEmail(String email){
+    public CommonResponse getProfileByEmail(String email){
         try {
             return CommonResponse.builder()
                     .answer(profileRepoInter.getProfileByEmail(email))
@@ -47,7 +47,7 @@ public class ProfileService {
         }
     }
 
-    private CommonResponse changeProfile(ProfileDto profileDto){
+    public CommonResponse changeProfile(ProfileDto profileDto){
         try {
             return CommonResponse.builder()
                     .answer( profileRepoInter.changeProfile(profileMapper.toModel(profileDto)))
@@ -60,4 +60,6 @@ public class ProfileService {
                     .message("Something went wrong").build();
         }
     }
+
+
 }

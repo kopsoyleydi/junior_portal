@@ -19,24 +19,24 @@ public class ChatController {
 
     @PostMapping("/process")
     public CommonResponse chatProcessMessaging(@RequestBody MessageBody messageBody){
-        return chatService.getProcessMessaging(messageBody);
+        return chatService.processMessaging(messageBody);
     }
 
     @GetMapping("/countNewMessage")
     public CommonResponse countNewMessageFromChat(@RequestParam("senderId") Long senderId,
                                                   @RequestParam ("recipientId") Long recipientId){
-        return chatService.getCountNewMessages(new NewMessage(senderId, recipientId));
+        return chatService.countNewMessages(new NewMessage(senderId, recipientId));
     }
 
     @GetMapping("/findMessagesOnChat")
     public CommonResponse findMessagesOnChat(@RequestParam("senderId") Long senderId,
                                              @RequestParam ("recipientId") Long recipientId){
-        return chatService.getFindChatMessages(new FindMessage(senderId, recipientId));
+        return chatService.findChatMessages(new FindMessage(senderId, recipientId));
     }
 
     @PutMapping("/updateStatus")
     public CommonResponse updateStatusMessages(@RequestBody UpdateStatuses updateStatuses){
-        return chatService.setUpdateStatuses(updateStatuses);
+        return chatService.updateStatuses(updateStatuses);
     }
 
 

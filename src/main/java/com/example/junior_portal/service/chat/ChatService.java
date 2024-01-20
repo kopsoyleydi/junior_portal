@@ -38,7 +38,7 @@ public class ChatService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
-    private CommonResponse processMessaging(MessageBody messageBody){
+    public CommonResponse processMessaging(MessageBody messageBody) {
         ChatMessage chatMessage = setterChatMessage(messageBody);
         chatMessage.setChatId(chatRoomRepoInter
                 .getChatRoom(chatMessage.getSenderId(), chatMessage.getRecipientId()).getChatId());
@@ -54,21 +54,19 @@ public class ChatService {
     }
 
 
-
-    private CommonResponse addNewMessage(MessageBody messageBody){
+    private CommonResponse addNewMessage(MessageBody messageBody) {
         try {
             ChatMessage chatMessage = setterChatMessage(messageBody);
             chatMessageInter.create(chatMessage);
             return CommonResponse.builder().message("Message send successfully").status(HttpStatus.CREATED).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.info("Service: ChatService, method: addNewMessages");
             return CommonResponse.builder().message("Something went wrong").status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
     }
 
-    private ChatMessage setterChatMessage(MessageBody messageBody){
+    private ChatMessage setterChatMessage(MessageBody messageBody) {
         ChatMessage chatMessage = new ChatMessage();
         User sender = userRepoInter.getUserByEmail(messageBody.getSenderEmail());
         chatMessage.setSenderId(sender.getId());
@@ -81,17 +79,16 @@ public class ChatService {
         return chatMessage;
     }
 
-    private CommonResponse countNewMessages(NewMessage newMessage){
+    public CommonResponse countNewMessages(NewMessage newMessage) {
         try {
             List<ChatMessage> countNewMessages = chatMessageInter.countNewMessages(newMessage.getSenderId()
                     , newMessage.getRecipientId());
             long countMessages = countNewMessages.size();
             return CommonResponse.builder()
                     .answer(countMessages).message("You have " + countMessages + " new " +
-                            ((countMessages > 1)?"messages":"message"))
+                            ((countMessages > 1) ? "messages" : "message"))
                     .status(HttpStatus.OK).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: countNewMessages");
             return CommonResponse.builder()
@@ -99,7 +96,7 @@ public class ChatService {
         }
     }
 
-    private CommonResponse findChatMessages(FindMessage findMessage){
+    public CommonResponse findChatMessages(FindMessage findMessage) {
         try {
             List<ChatMessage> messages = chatMessageInter.findChatMessages(
                     findMessage.getSenderId(),
@@ -109,8 +106,7 @@ public class ChatService {
                     .answer(chatMessageMapper.toDtoList(messages))
                     .message("Messages")
                     .status(HttpStatus.OK).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.info("Service: ChatService, method: findChatMessages");
             e.getStackTrace();
             return CommonResponse.builder()
@@ -120,36 +116,19 @@ public class ChatService {
         }
     }
 
-    private CommonResponse updateStatuses(UpdateStatuses updateStatuses){
+    public CommonResponse updateStatuses(UpdateStatuses updateStatuses) {
         try {
             chatMessageInter.updateStatuses(updateStatuses.getSenderId(), updateStatuses.getRecipientId(), updateStatuses.getMessageStatus());
             return CommonResponse.builder()
                     .message("Message status updated").status(HttpStatus.OK)
                     .build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: updateStatuses");
             return CommonResponse.builder()
                     .message("Something went wrong").status(HttpStatus.valueOf(501))
                     .build();
         }
-    }
-
-    public CommonResponse getProcessMessaging(@Payload MessageBody messageBody){
-        return processMessaging(messageBody);
-    }
-
-    public CommonResponse getCountNewMessages(@Payload NewMessage newMessage){
-        return countNewMessages(newMessage);
-    }
-
-    public CommonResponse getFindChatMessages(@Payload FindMessage findMessage){
-        return findChatMessages(findMessage);
-    }
-
-    public CommonResponse setUpdateStatuses(@Payload UpdateStatuses updateStatuses){
-        return updateStatuses(updateStatuses);
     }
 
 }

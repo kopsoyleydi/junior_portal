@@ -19,7 +19,7 @@ public class InternshipService {
 
     private final InternshipMapper internshipMapper;
 
-    private CommonResponse createInternship(InternshipDto internshipDto){
+    public CommonResponse createInternship(InternshipDto internshipDto){
         try {
             return CommonResponse.builder()
                     .message("Internship successfully created")
@@ -40,7 +40,7 @@ public class InternshipService {
         }
     }
 
-    private CommonResponse getInternshipById(Long internshipId){
+    public CommonResponse getInternshipById(Long internshipId){
         try {
             return CommonResponse.builder()
                     .message("Internship information")
@@ -61,7 +61,7 @@ public class InternshipService {
     }
 
 
-    private CommonResponse getAllInternships(){
+    public CommonResponse getAllInternships(){
         try {
             return CommonResponse.builder()
                     .answer(internshipMapper.toDtoList(internshipRepoInter.getAllInternships()))
@@ -78,7 +78,7 @@ public class InternshipService {
 
     }
 
-    private CommonResponse changeInternship(InternshipDto internshipDto){
+    public CommonResponse changeInternship(InternshipDto internshipDto){
         try {
             return CommonResponse.builder()
                     .message("Internship successfully created")
@@ -99,7 +99,7 @@ public class InternshipService {
         }
     }
 
-    private CommonResponse changeStatusForInternship(Long internshipId){
+    public CommonResponse changeStatusForInternship(Long internshipId){
         try {
             return CommonResponse.builder()
                     .message("Status changed successfully")
