@@ -11,4 +11,6 @@ public interface UserRepoInter {
     User changeUser(User user);
 
     User getUserByEmail(String email);
+
+    User updatePassword(String email, String password);
 }

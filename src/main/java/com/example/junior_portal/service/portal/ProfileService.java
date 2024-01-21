@@ -18,11 +18,11 @@ public class ProfileService {
 
     private final ProfileMapper profileMapper;
 
-    public CommonResponse createProfile(ProfileDto profileDto){
+    public CommonResponse fillProfile(ProfileDto profileDto){
         try {
             return CommonResponse.builder()
-                    .message("Profile created")
-                    .status(HttpStatus.CREATED)
+                    .message("Profile fill")
+                    .status(HttpStatus.OK)
                     .answer(profileRepoInter.createProfile(profileMapper.toModel(profileDto))).build();
         }
         catch (Exception e){

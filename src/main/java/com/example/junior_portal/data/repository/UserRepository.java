@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -12,4 +13,7 @@ import org.springframework.stereotype.Repository;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
+
+    @Query("update User u set u.password = :password where u.email = :email")
+    User updateByEmail(String email, String password);
 }

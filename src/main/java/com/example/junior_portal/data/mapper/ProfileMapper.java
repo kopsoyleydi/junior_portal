@@ -1,5 +1,7 @@
 package com.example.junior_portal.data.mapper;
 
+import com.example.junior_portal.data.impl.inter.UserRepoInter;
+import com.example.junior_portal.data.repository.UserRepository;
 import com.example.junior_portal.dtos.dto.ProfileDto;
 import com.example.junior_portal.model.Profile;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +16,14 @@ public class ProfileMapper {
 
     private final UserMapper userMapper;
 
+    private final UserRepoInter userRepoInter;
+
     public ProfileDto toDto(Profile profile){
         ProfileDto profileDto = new ProfileDto();
         profileDto.setId(profileDto.getId());
         profileDto.setBio(profile.getBio());
         profileDto.setName(profile.getName());
+
         profileDto.setUserId(userMapper.toDto(profile.getUserId()));
         profileDto.setUniversity(profile.getUniversity());
         profileDto.setExperience(profile.getExperience());

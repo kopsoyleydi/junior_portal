@@ -3,12 +3,15 @@ package com.example.junior_portal.service.portal;
 import com.example.junior_portal.data.impl.inter.PermissionRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.dtos.bodies.request.AuthRequest;
+import com.example.junior_portal.dtos.bodies.request.PassChange;
 import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
+import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.Permission;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -63,5 +66,35 @@ public class UserService implements UserDetailsService {
         }
         assert userDetails != null;
         return jwtTokenUtil.generateToken(userDetails);
+    }
+
+    public CommonResponse changeUserPassword(PassChange passChange){
+        try {
+            User user = userRepoInter.getUserByEmail(passChange.getUserEmail());
+            if(user!=null){
+                if(passChange.getPassword().equals(passChange.getRepeatPassword())){
+                    userRepoInter.updatePassword(passChange.getUserEmail(),
+                            passwordEncoder.encode(passChange.getPassword()));
+                    return CommonResponse.builder()
+                            .message("Password change success")
+                            .status(HttpStatus.OK).build();
+                }
+                else {
+                    return CommonResponse.builder()
+                            .message("Пароли не совподают")
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                }
+            }
+            return CommonResponse.builder()
+                    .message("Пользователь не найден")
+                    .status(HttpStatus.NOT_FOUND).build();
+
+        }
+        catch (Exception e){
+            log.info("Service: UserService, method: changeUserPassword");
+            return CommonResponse.builder()
+                    .message("Something went wrong")
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
