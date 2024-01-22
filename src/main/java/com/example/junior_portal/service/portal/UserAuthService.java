@@ -42,12 +42,7 @@ public class UserAuthService {
     }
 
     public ResponseEntity<?> createNewUser(RegistrationBody registrationBody) {
-        if (userService.loadUserByUsername(registrationBody.getEmail()) != null) {
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Пользователь с указанным именем уже существует"),
-                    HttpStatus.BAD_REQUEST);
-        }
+
         User user = userService.createNewUser(registrationBody);
         return ResponseEntity.ok(user);
     }

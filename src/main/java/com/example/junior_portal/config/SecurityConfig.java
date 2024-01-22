@@ -42,6 +42,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         http.cors().disable().authorizeHttpRequests()
                 .requestMatchers("/api").authenticated().requestMatchers("/api/**").authenticated()
+                .requestMatchers("/**").permitAll()
                 .dispatcherTypeMatchers(HttpMethod.valueOf("/user")).authenticated()
                 .requestMatchers("/admin").hasRole("ADMIN").requestMatchers("/admin/**").hasRole("ADMIN")
                 .shouldFilterAllDispatcherTypes(true).anyRequest().permitAll()

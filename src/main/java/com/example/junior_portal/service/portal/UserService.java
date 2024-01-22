@@ -48,7 +48,8 @@ public class UserService implements UserDetailsService {
 
     public User createNewUser(RegistrationBody registrationBody){
         User user = new User();
-        user.setUsername(registrationBody.getEmail());
+        user.setEmail(registrationBody.getEmail());
+        user.setUsername(registrationBody.getUsername());
         List<Permission> permissions = new ArrayList<>();
         permissions.add(permissionRepoInter.getPermissionById(1L));
         user.setPermissions(permissions);
