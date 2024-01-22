@@ -4,6 +4,7 @@ import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -17,6 +18,6 @@ public class ChatMessageDto {
     private String senderName;
     private String recipientName;
     private String content;
-    private Date timestamp;
+    private Instant timestamp;
     private MessageStatus status;
 }

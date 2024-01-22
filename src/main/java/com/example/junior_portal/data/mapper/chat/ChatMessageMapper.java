@@ -5,6 +5,7 @@ import com.example.junior_portal.model.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class ChatMessageMapper {
         chatMessageDto.setSenderName(chatMessage.getSenderName());
         chatMessageDto.setRecipientName(chatMessage.getRecipientName());
         chatMessageDto.setStatus(chatMessage.getStatus());
-        chatMessageDto.setTimestamp(chatMessage.getTimestamp());
+        chatMessageDto.setTimestamp(Instant.now());
         return chatMessageDto;
     };
 
@@ -34,7 +35,7 @@ public class ChatMessageMapper {
         chatMessage.setSenderName(chatMessageDto.getSenderName());
         chatMessage.setRecipientName(chatMessageDto.getRecipientName());
         chatMessage.setStatus(chatMessageDto.getStatus());
-        chatMessage.setTimestamp(chatMessageDto.getTimestamp());
+        chatMessage.setTimestamp(Instant.now());
         return chatMessage;
     };
 

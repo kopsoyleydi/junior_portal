@@ -4,12 +4,11 @@ import com.example.junior_portal.dtos.dto.InternshipDto;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.service.portal.InternshipService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/internship")
+@RequestMapping("api/internship")
 public class InternshipController {
 
     private final InternshipService internshipService;
