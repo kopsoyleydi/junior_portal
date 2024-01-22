@@ -9,9 +9,9 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")// Указываете путь, для которого применяется CORS
-                .allowedOrigins("http://localhost:3000")  // Разрешенные домены
-                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Разрешенные HTTP-методы
-                .allowedHeaders("*");  // Разрешенные заголовки
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*");
     }
 }
