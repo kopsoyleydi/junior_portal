@@ -43,15 +43,14 @@ public class UserAuthService {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    public CommonResponse createNewUser(RegistrationBody registrationBody) {
+    public ResponseEntity<?> createNewUser(RegistrationBody registrationBody) {
         if (userService.loadUserByUsername(registrationBody.getEmail()).getUsername() != null) {
-            return CommonResponse.builder()
-                    .message("User already exist")
-                    .answer("Take").build();
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.UNAUTHORIZED.value()
+                    , "Неправильный логин или пароль")
+                    , HttpStatus.UNAUTHORIZED);
         }
         User user = userService.createNewUser(registrationBody);
-        return CommonResponse.builder()
-                .status(HttpStatus.OK)
-                .answer(user).build();
+        return ResponseEntity.ok(user);
     }
 }
