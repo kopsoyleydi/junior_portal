@@ -3,14 +3,12 @@ package com.example.junior_portal.service.portal;
 import com.example.junior_portal.dtos.bodies.request.AuthRequest;
 import com.example.junior_portal.dtos.bodies.response.JwtResponse;
 import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
-import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.exception.AppError;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +29,9 @@ public class UserAuthService {
 
     public ResponseEntity<?> createAuthToken(AuthRequest authRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authRequest.getEmail(),
+                    authRequest.getPassword()));
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(new AppError(
                     HttpStatus.UNAUTHORIZED.value()
@@ -44,10 +44,10 @@ public class UserAuthService {
     }
 
     public ResponseEntity<?> createNewUser(RegistrationBody registrationBody) {
-        if (userService.loadUserByUsername(registrationBody.getEmail()).getUsername() != null) {
+        if (userService.loadUserByUsername(registrationBody.getEmail()) != null) {
             return new ResponseEntity<>(new AppError(
                     HttpStatus.UNAUTHORIZED.value()
-                    , "Неправильный логин или пароль")
+                    , "Такой пользователь с email уже существует")
                     , HttpStatus.UNAUTHORIZED);
         }
         User user = userService.createNewUser(registrationBody);

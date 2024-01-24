@@ -1,4 +1,4 @@
-package com.example.junior_portal.controller;
+package com.example.junior_portal.api;
 
 import com.example.junior_portal.dtos.dto.InternshipDto;
 import com.example.junior_portal.dtos.response.CommonResponse;

@@ -1,12 +1,16 @@
 package com.example.junior_portal.service.portal;
 
 import com.example.junior_portal.data.impl.inter.PermissionRepoInter;
+import com.example.junior_portal.data.impl.inter.ProfileRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
+import com.example.junior_portal.data.mapper.UserMapper;
 import com.example.junior_portal.dtos.bodies.request.AuthRequest;
 import com.example.junior_portal.dtos.bodies.request.PassChange;
 import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
+import com.example.junior_portal.dtos.bodies.response.CurrentUser;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.Permission;
+import com.example.junior_portal.model.Profile;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,27 +28,37 @@ import java.util.List;
 @Slf4j
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepoInter userRepoInter;
+    @Autowired private UserRepoInter userRepoInter;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    @Autowired private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private PermissionRepoInter permissionRepoInter;
+    @Autowired private ProfileRepoInter profileRepoInter;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired private PermissionRepoInter permissionRepoInter;
+
+    @Autowired private UserMapper userMapper;
+
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepoInter.getUserByEmail(username);
+    public UserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
+        String email = jwtTokenUtil.extractUsername(token);
+        User user = userRepoInter.getUserByEmail(email);
+        Profile profile = profileRepoInter.getProfileByEmail(email);
         if (user != null) {
-            return user;
+            return CurrentUser.builder().bio(profile.getBio())
+                    .userId(userMapper.toDto(user))
+                    .id(profile.getId())
+                    .name(profile.getName())
+                    .university(profile.getUniversity())
+                    .experience(profile.getExperience())
+                    .build();
         } else {
             throw new UsernameNotFoundException("User Not found");
         }
     }
+
+
 
     public User createNewUser(RegistrationBody registrationBody){
         User user = new User();
@@ -58,16 +72,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public String authUser(AuthRequest authRequest){
-        UserDetails userDetails = null;
-        try {
-            userDetails = loadUserByUsername(authRequest.getEmail());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        assert userDetails != null;
-        return jwtTokenUtil.generateToken(userDetails);
-    }
 
     public CommonResponse changeUserPassword(PassChange passChange){
         try {
