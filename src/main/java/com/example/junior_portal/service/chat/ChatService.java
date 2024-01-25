@@ -54,6 +54,7 @@ public class ChatService {
     }
 
 
+    @Deprecated
     private CommonResponse addNewMessage(MessageBody messageBody) {
         try {
             ChatMessage chatMessage = setterChatMessage(messageBody);

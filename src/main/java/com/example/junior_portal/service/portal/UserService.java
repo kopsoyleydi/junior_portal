@@ -4,7 +4,6 @@ import com.example.junior_portal.data.impl.inter.PermissionRepoInter;
 import com.example.junior_portal.data.impl.inter.ProfileRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.mapper.UserMapper;
-import com.example.junior_portal.dtos.bodies.request.AuthRequest;
 import com.example.junior_portal.dtos.bodies.request.PassChange;
 import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
 import com.example.junior_portal.dtos.bodies.response.CurrentUser;
