@@ -16,7 +16,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
-    private CommonResponse createRoom(CreateRoom createRoom){
+    public CommonResponse createRoom(CreateRoom createRoom){
         try {
             if(createRoom.getMessage() == null) {
                 return CommonResponse.builder()
