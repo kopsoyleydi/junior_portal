@@ -16,4 +16,5 @@ public interface ChatMessageRepoInter {
     ChatMessage findById(Long id);
 
     void updateStatuses(Long senderId, Long recipientId, MessageStatus status);
-}
+
+ }

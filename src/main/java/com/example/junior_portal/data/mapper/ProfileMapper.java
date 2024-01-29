@@ -1,7 +1,6 @@
 package com.example.junior_portal.data.mapper;
 
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
-import com.example.junior_portal.data.repository.UserRepository;
 import com.example.junior_portal.dtos.dto.ProfileDto;
 import com.example.junior_portal.model.Profile;
 import lombok.RequiredArgsConstructor;

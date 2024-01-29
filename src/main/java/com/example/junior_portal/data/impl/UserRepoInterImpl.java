@@ -27,7 +27,7 @@ public class UserRepoInterImpl implements UserRepoInter {
     }
 
     @Override
-    public User updatePassword(String email, String password) {
-        return userRepository.updateByEmail(email, password);
+    public void updatePassword(String email, String password) {
+        userRepository.updateByEmail(email, password);
     }
 }
