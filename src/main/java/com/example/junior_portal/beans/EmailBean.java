@@ -17,7 +17,7 @@ public class EmailBean {
         mailSender.setPort(587);
 
         mailSender.setUsername("omyrzakovbeksultan1@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setPassword("yhgp qnyy osgw jwrv");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
