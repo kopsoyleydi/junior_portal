@@ -11,31 +11,23 @@ import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK
-)
-@AutoConfigureMockMvc
+
 public class ProfileServiceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
 
     @InjectMocks
     private ProfileService profileService;
 
-    @Autowired private ProfileRepoInter profileRepoInter;
+    @Mock private ProfileRepoInter profileRepoInter;
 
-    @Autowired private ProfileMapper profileMapper;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Mock private ProfileMapper profileMapper;
+    @Mock private PasswordEncoder passwordEncoder;
 
     private Profile profile;
 
