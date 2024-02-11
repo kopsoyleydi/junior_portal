@@ -34,16 +34,7 @@ public class ProfileServiceTest {
 
     @BeforeEach
     void setUp(){
-        Profile profile = new Profile();
-        profile.setName("test");
-        profile.setBio("Test my life");
-        profile.setUniversity("IITU");
-        profile.setExperience("3 years experience");
-        User user = new User();
-        user.setEmail("test@mail.ru");
-        user.setId(1L);
-        user.setUsername("test");
-        user.setPassword(passwordEncoder.encode("test"));
+
     }
 
     @Test
