@@ -34,20 +34,13 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.exceptionHandling().accessDeniedPage("/403-page");
 
         AuthenticationManagerBuilder builder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.userDetailsService(userService()).passwordEncoder(passwordEncoder());
 
         http.cors().disable().authorizeHttpRequests()
-                .requestMatchers("/api").authenticated().requestMatchers("/api/**").authenticated()
-                .requestMatchers("/**").permitAll()
-                .dispatcherTypeMatchers(HttpMethod.valueOf("/user")).authenticated()
-                .requestMatchers("/admin").hasRole("ADMIN").requestMatchers("/admin/**").hasRole("ADMIN")
-                .shouldFilterAllDispatcherTypes(true).anyRequest().permitAll()
-                .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .requestMatchers("/**").permitAll();
         http.logout()
                 .logoutUrl("/sign-out"); // post request to /sign-out
 
