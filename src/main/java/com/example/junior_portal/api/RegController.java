@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("reg")
+@RequestMapping("basic/reg")
 public class RegController {
 
     private final UserAuthService userAuthService;

@@ -5,17 +5,20 @@ import com.example.junior_portal.service.portal.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -34,27 +37,14 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests
+                        (a -> a.requestMatchers("/**").permitAll()
+                                .requestMatchers("/basic/**").permitAll()
+                                .requestMatchers("/api/**").authenticated())
 
-        http.exceptionHandling().accessDeniedPage("/403-page");
-
-        AuthenticationManagerBuilder builder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(userService()).passwordEncoder(passwordEncoder());
-
-        http.cors().disable().authorizeHttpRequests()
-                .requestMatchers("/basic/**").permitAll()
-                .requestMatchers("/api").authenticated().requestMatchers("/api/**").authenticated()
-                .dispatcherTypeMatchers(HttpMethod.valueOf("/user")).authenticated()
-                .requestMatchers("/admin").hasRole("ADMIN").requestMatchers("/admin/**").hasRole("ADMIN")
-                .shouldFilterAllDispatcherTypes(true).anyRequest().permitAll()
-                .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        http.logout()
-                .logoutUrl("/sign-out"); // post request to /sign-out
-
-        http.csrf().disable().cors();
-
-        return http.build();
+                .addFilterAt(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
 
@@ -67,4 +57,5 @@ public class SecurityConfig implements WebMvcConfigurer {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 }
