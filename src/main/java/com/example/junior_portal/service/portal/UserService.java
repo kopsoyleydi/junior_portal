@@ -40,8 +40,7 @@ public class UserService implements UserDetailsService {
     @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
-        String email = jwtTokenUtil.extractUsername(token);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepoInter.getUserByEmail(email);
         Profile profile = profileRepoInter.getProfileByEmail(email);
         if (user != null) {
