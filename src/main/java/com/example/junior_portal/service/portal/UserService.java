@@ -42,18 +42,20 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepoInter.getUserByEmail(email);
-        Profile profile = profileRepoInter.getProfileByEmail(email);
         if (user != null) {
-            return CurrentUser.builder().bio(profile.getBio())
-                    .userId(userMapper.toDto(user))
-                    .id(profile.getId())
-                    .name(profile.getName())
-                    .university(profile.getUniversity())
-                    .experience(profile.getExperience())
-                    .build();
+            return user;
         } else {
             throw new UsernameNotFoundException("User Not found");
         }
+    }
+
+    public User getUserByEmail(String email){
+        return userRepoInter.getUserByEmail(email);
+    }
+
+    public boolean check(String email){
+        User user = userRepoInter.getUserByEmail(email);
+        return user == null;
     }
 
 

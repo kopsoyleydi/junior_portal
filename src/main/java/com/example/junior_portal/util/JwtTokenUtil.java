@@ -27,14 +27,11 @@ public class JwtTokenUtil {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    @Value("${api.security.token.secret}")
-    private String secret;
-
     /**
      * Generate a new token.
      **/
     public String generateToken(UserDetails userDetails) {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         Map<String, Object> extraClaims = new HashMap<>();
         List<String> rolesList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -63,7 +60,7 @@ public class JwtTokenUtil {
      * validate Token.
      **/
     public String validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.require(algorithm)
                 .withIssuer("app-personal")
                 .build()

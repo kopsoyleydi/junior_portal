@@ -44,11 +44,8 @@ public class UserAuthService {
     }
 
     public ResponseEntity<?> createNewUser(RegistrationBody registrationBody) {
-        if (userService.loadUserByUsername(registrationBody.getEmail()) != null) {
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.UNAUTHORIZED.value()
-                    , "Такой пользователь с email уже существует")
-                    , HttpStatus.UNAUTHORIZED);
+        if (!userService.check(registrationBody.getEmail())) {
+            return ResponseEntity.ok("Пользователь с таким именем уже есть");
         }
         User user = userService.createNewUser(registrationBody);
         return ResponseEntity.ok(user);
