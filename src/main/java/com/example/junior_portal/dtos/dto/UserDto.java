@@ -18,6 +18,7 @@ public class UserDto {
 
     private String password;
 
+    private String pictureLink;
     @ManyToMany
     private List<PermissionDto> permissions;
 }

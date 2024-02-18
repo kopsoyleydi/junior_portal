@@ -3,11 +3,10 @@ package com.example.junior_portal.api;
 import com.example.junior_portal.dtos.bodies.request.PassChange;
 import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.service.portal.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +18,10 @@ public class UserController {
     @PutMapping("/pass_change")
     public CommonResponse updatePassword(@RequestBody PassChange passChange){
         return userService.changeUserPassword(passChange);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token){
+        return userService.getCurrentUser(token);
     }
 }

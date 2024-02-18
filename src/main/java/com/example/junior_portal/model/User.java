@@ -31,6 +31,9 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;
 
+    @Column(name = "picture_link")
+    private String pictureLink;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -20,6 +20,7 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
         userDto.setUsername(user.getUsername());
+        userDto.setPictureLink(user.getPictureLink());
         userDto.setPermissions(permissionMapper.toDtoList(user.getPermissions()));
         return userDto;
     };
@@ -30,6 +31,7 @@ public class UserMapper {
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         user.setUsername(userDto.getUsername());
+        user.setPictureLink(userDto.getPictureLink());
         user.setPermissions(permissionMapper.toModelList(userDto.getPermissions()));
         return user;
     };

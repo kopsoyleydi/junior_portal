@@ -1,25 +1,22 @@
 package com.example.junior_portal.util;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import lombok.SneakyThrows;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
-import org.springframework.security.core.token.SecureRandomFactoryBean;
-import org.springframework.security.core.token.Token;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.security.Key;
 import java.util.*;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenUtil {
-
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
@@ -27,57 +24,88 @@ public class JwtTokenUtil {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    /**
-     * Generate a new token.
-     **/
-    public String generateToken(UserDetails userDetails) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+    public String extractUsername(String token) {
+        String username;
+        try {
+            final Claims claims = this.extractAllClaims(token);
+            username = claims.getSubject();
+        } catch (Exception e) {
+            username = null;
+        }
+        return username;
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public String generateToken(
+            UserDetails userDetails
+    ) {
         Map<String, Object> extraClaims = new HashMap<>();
         List<String> rolesList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         extraClaims.put("permissions",rolesList);
-        return JWT.create()
-                .withIssuer("app-personal")
-                .withSubject(userDetails.getUsername())
-                .withPayload(extraClaims)
-                .withExpiresAt(Date.from(generateExpirationDate()))
-                .sign(algorithm);
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-
-    /**
-     * Generate expirationToke.
-     **/
-    private Instant generateExpirationDate() {
-        return LocalDateTime.now()
-                .plusHours(2)
-                .toInstant(ZoneOffset.of("-03:00"));
+    public String generateRefreshToken(
+            UserDetails userDetails
+    ) {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-
-    /**
-     * validate Token.
-     **/
-    public String validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        return JWT.require(algorithm)
-                .withIssuer("app-personal")
-                .build()
-                .verify(token)
-                .getSubject();
+    private String buildToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails,
+            long expiration
+    ) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(),SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    @SneakyThrows
-    public String generateTokenToResetPassword(String email, String password) {
-        KeyBasedPersistenceTokenService tokenService = new KeyBasedPersistenceTokenService();
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
 
-        tokenService.setServerSecret(password);
-        tokenService.setServerInteger(3);
-        tokenService.setSecureRandom(new SecureRandomFactoryBean().getObject());
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
 
-        Token token = tokenService.allocateToken(email);
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 
-        return token.getKey();
+    private Claims extractAllClaims(String token) {
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
+        return claims;
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+    public List<String> getRoles(String token) {
+        List<String> roles = extractAllClaims(token).get("roles", List.class);
+        if (roles == null) {
+            return Collections.emptyList(); // вернуть пустой список
+        }
+        return roles;
     }
 }

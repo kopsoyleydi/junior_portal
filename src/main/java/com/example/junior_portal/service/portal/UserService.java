@@ -15,6 +15,7 @@ import com.example.junior_portal.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -100,6 +101,19 @@ public class UserService implements UserDetailsService {
             return CommonResponse.builder()
                     .message("Something went wrong")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    public ResponseEntity<?> getCurrentUser(String token){
+        token = token.replace("Bearer ", "");
+        String email = jwtTokenUtil.extractUsername(token);
+        try {
+            User user = userRepoInter.getUserByEmail(email);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e){
+            log.info("Service: UserService, method: getCurrentUser");
+            return ResponseEntity.internalServerError().body("Something went wrong");
         }
     }
 }
