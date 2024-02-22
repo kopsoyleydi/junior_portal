@@ -7,12 +7,13 @@ import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatRoom;
 import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ChatMessageInterImpl implements ChatMessageRepoInter {
 

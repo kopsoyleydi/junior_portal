@@ -4,9 +4,10 @@ import com.example.junior_portal.data.impl.inter.ProfileRepoInter;
 import com.example.junior_portal.data.repository.ProfileRepository;
 import com.example.junior_portal.model.Profile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ProfileRepoInterImpl implements ProfileRepoInter {
 

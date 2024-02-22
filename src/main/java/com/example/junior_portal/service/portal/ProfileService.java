@@ -7,6 +7,7 @@ import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,46 +19,39 @@ public class ProfileService {
 
     private final ProfileMapper profileMapper;
 
-    public CommonResponse fillProfile(ProfileDto profileDto){
+    public ResponseEntity<?> fillProfile(ProfileDto profileDto){
         try {
-            return CommonResponse.builder()
-                    .message("Profile fill")
-                    .status(HttpStatus.OK)
-                    .answer(profileRepoInter.createProfile(profileMapper.toModel(profileDto))).build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(profileRepoInter.createProfile(profileMapper.toModel(profileDto)));
         }
         catch (Exception e){
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.valueOf(501)).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse getProfileByEmail(String email){
+    public ResponseEntity<?> getProfileByEmail(String email){
         try {
-            return CommonResponse.builder()
-                    .answer(profileRepoInter.getProfileByEmail(email))
-                    .status(HttpStatus.OK).build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(profileRepoInter.getProfileByEmail(email));
         }
         catch (Exception e){
             e.getStackTrace();
-            return CommonResponse.builder()
-                    .status(HttpStatus.valueOf(501))
-                    .message("Something went wrong")
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse changeProfile(ProfileDto profileDto){
+    public ResponseEntity<?> changeProfile(ProfileDto profileDto){
         try {
-            return CommonResponse.builder()
-                    .answer( profileRepoInter.changeProfile(profileMapper.toModel(profileDto)))
-                    .status(HttpStatus.OK)
-                    .message("Profile change successfully").build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body( profileRepoInter.changeProfile(profileMapper.toModel(profileDto)));
         }
         catch (Exception e){
-            return CommonResponse.builder()
-                    .status(HttpStatus.valueOf(501))
-                    .message("Something went wrong").build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 

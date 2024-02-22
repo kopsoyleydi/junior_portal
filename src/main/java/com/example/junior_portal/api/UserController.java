@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/pass_change")
-    public CommonResponse updatePassword(@RequestBody PassChange passChange){
+    public ResponseEntity<?> updatePassword(@RequestBody PassChange passChange){
         return userService.changeUserPassword(passChange);
     }
 

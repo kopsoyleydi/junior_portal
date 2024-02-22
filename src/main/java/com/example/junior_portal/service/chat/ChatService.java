@@ -16,6 +16,7 @@ import com.example.junior_portal.model.chat.ChatNotification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class ChatService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
-    public CommonResponse processMessaging(MessageBody messageBody) {
+    public ResponseEntity<?> processMessaging(MessageBody messageBody) {
         ChatMessage chatMessage = setterChatMessage(messageBody);
         chatMessage.setChatId(chatRoomRepoInter
                 .getChatRoom(chatMessage.getSenderId(), chatMessage.getRecipientId()).getChatId());
@@ -48,25 +49,22 @@ public class ChatService {
                 chatMessage.getRecipientId()), "/queue/messages",
                 new ChatNotification(saved.getId(), saved.getSenderId(), saved.getSenderName()));
 
-        return CommonResponse.builder()
-                .message("Message send success")
-                .status(HttpStatus.ACCEPTED).build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body("Message send success");
     }
 
 
     @Deprecated
-    private CommonResponse addNewMessage(MessageBody messageBody) {
+    private ResponseEntity<?> addNewMessage(MessageBody messageBody) {
         try {
             ChatMessage chatMessage = setterChatMessage(messageBody);
             chatMessageInter.create(chatMessage);
-            return CommonResponse.builder()
-                    .message("Message send successfully")
-                    .status(HttpStatus.CREATED).build();
+            return ResponseEntity
+                    .status(HttpStatus.CREATED).body("Message send successfully");
         } catch (Exception e) {
             log.info("Service: ChatService, method: addNewMessages");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
 
     }
@@ -84,58 +82,53 @@ public class ChatService {
         return chatMessage;
     }
 
-    public CommonResponse countNewMessages(NewMessage newMessage) {
+    public ResponseEntity<?> countNewMessages(NewMessage newMessage) {
         try {
             List<ChatMessage> countNewMessages = chatMessageInter.countNewMessages(newMessage.getSenderId()
                     , newMessage.getRecipientId());
             long countMessages = countNewMessages.size();
-            return CommonResponse.builder()
-                    .answer(countMessages).message("You have " + countMessages + " new " +
-                            ((countMessages > 1) ? "messages" : "message"))
-                    .status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("You have " + countMessages + " new " +
+                            ((countMessages > 1) ? "messages" : "message"));
         } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: countNewMessages");
-            return CommonResponse.builder()
-                    .message("Something went wrong").status(HttpStatus.valueOf(501)).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse findChatMessages(FindMessage findMessage) {
+    public ResponseEntity<?> findChatMessages(FindMessage findMessage) {
         try {
             List<ChatMessage> messages = chatMessageInter.findChatMessages(
                     findMessage.getSenderId(),
                     findMessage.getRecipientId()
             );
-            return CommonResponse.builder()
-                    .answer(chatMessageMapper.toDtoList(messages))
-                    .message("Messages")
-                    .status(HttpStatus.OK).build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(chatMessageMapper.toDtoList(messages));
         } catch (Exception e) {
             log.info("Service: ChatService, method: findChatMessages");
             e.getStackTrace();
-            return CommonResponse.builder()
-                    .answer("No messages")
-                    .message("Something new wrong")
-                    .status(HttpStatus.valueOf(501)).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse updateStatuses(UpdateStatuses updateStatuses) {
+    public ResponseEntity<?> updateStatuses(UpdateStatuses updateStatuses) {
         try {
             chatMessageInter.updateStatuses(
                     updateStatuses.getSenderId(),
                     updateStatuses.getRecipientId(),
                     updateStatuses.getMessageStatus());
-            return CommonResponse.builder()
-                    .message("Message status updated").status(HttpStatus.OK)
-                    .build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Message status updated");
         } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: updateStatuses");
-            return CommonResponse.builder()
-                    .message("Something went wrong").status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 

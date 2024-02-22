@@ -4,9 +4,10 @@ import com.example.junior_portal.data.impl.inter.ConnectionRepoInter;
 import com.example.junior_portal.data.repository.ConnectionRepository;
 import com.example.junior_portal.model.Connection;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ConnectionRepoInterImpl implements ConnectionRepoInter {
 

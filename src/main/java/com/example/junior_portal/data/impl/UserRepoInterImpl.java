@@ -4,9 +4,10 @@ import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.repository.UserRepository;
 import com.example.junior_portal.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class UserRepoInterImpl implements UserRepoInter {
 

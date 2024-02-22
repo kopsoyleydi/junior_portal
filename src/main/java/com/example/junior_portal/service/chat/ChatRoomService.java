@@ -6,6 +6,7 @@ import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -16,23 +17,19 @@ public class ChatRoomService {
 
     private final ChatRoomRepoInter chatRoomRepoInter;
 
-    public CommonResponse createRoom(CreateRoom createRoom){
+    public ResponseEntity<?> createRoom(CreateRoom createRoom){
         try {
             if(createRoom.getMessage() == null) {
-                return CommonResponse.builder()
-                        .message("User should send message").status(HttpStatus.valueOf(406))
-                        .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("User should send message");
             }
-            return CommonResponse.builder()
-                    .answer(chatRoomRepoInter.getChatRoom(createRoom.getSenderId(), createRoom.getRecipientId()))
-                    .message("Room was successfully created").status(HttpStatus.OK)
-                    .build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(chatRoomRepoInter.getChatRoom(createRoom.getSenderId(), createRoom.getRecipientId()));
         }
         catch (Exception e){
             log.info("Service: ChatRoomService, create room method");
-            return CommonResponse.builder()
-                    .message("Something newt wrong").status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 }

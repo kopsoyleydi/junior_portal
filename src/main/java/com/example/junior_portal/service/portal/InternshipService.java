@@ -7,6 +7,7 @@ import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -19,102 +20,88 @@ public class InternshipService {
 
     private final InternshipMapper internshipMapper;
 
-    public CommonResponse createInternship(InternshipDto internshipDto){
+    public ResponseEntity<?> createInternship(InternshipDto internshipDto){
         try {
-            return CommonResponse.builder()
-                    .message("Internship successfully created")
+            return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .answer(internshipMapper
+                    .body(internshipMapper
                             .toDto(internshipRepoInter
                                     .addInternship(internshipMapper
-                                            .toModel(internshipDto))))
-                    .build();
+                                            .toModel(internshipDto))));
         }
         catch (Exception e){
             e.getStackTrace();
             log.info("Service: InternshipService, method: createInternship");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse getInternshipById(Long internshipId){
+    public ResponseEntity<?> getInternshipById(Long internshipId){
         try {
-            return CommonResponse.builder()
-                    .message("Internship information")
-                    .status(HttpStatus.ACCEPTED)
-                    .answer(internshipMapper
+            return ResponseEntity.
+                    status(HttpStatus.ACCEPTED)
+                    .body(internshipMapper
                             .toDto(internshipRepoInter
-                                    .getInternshipById(internshipId)))
-                    .build();
+                                    .getInternshipById(internshipId)));
         }
         catch (Exception e){
             e.getStackTrace();
             log.info("Service: InternshipService, method: getInternshipById");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.valueOf(501)).body("Something went wrong");
         }
     }
 
 
-    public CommonResponse getAllInternships(){
+    public ResponseEntity<?> getAllInternships(){
         try {
-            return CommonResponse.builder()
-                    .answer(internshipMapper.toDtoList(internshipRepoInter.getAllInternships()))
-                    .status(HttpStatus.OK).build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(internshipMapper.toDtoList(internshipRepoInter.getAllInternships()));
         }
         catch (Exception e){
             e.getStackTrace();
             log.info("Service: InternshipService, method: getAllInternships");
-            return CommonResponse.builder()
-                    .answer("Something went wrong")
-                    .status(HttpStatus.valueOf(501))
-                     .build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
 
     }
 
-    public CommonResponse changeInternship(InternshipDto internshipDto){
+    public ResponseEntity<?> changeInternship(InternshipDto internshipDto){
         try {
-            return CommonResponse.builder()
-                    .message("Internship successfully created")
+            return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .answer(internshipMapper
+                    .body(internshipMapper
                             .toDto(internshipRepoInter
                                     .changeInternship(internshipMapper
-                                            .toModel(internshipDto))))
-                    .build();
+                                            .toModel(internshipDto))));
         }
         catch (Exception e){
             e.getStackTrace();
             log.info("Service: InternshipService, method: changeInternship");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 
-    public CommonResponse changeStatusForInternship(Long internshipId){
+    public ResponseEntity<?> changeStatusForInternship(Long internshipId){
         try {
-            return CommonResponse.builder()
-                    .message("Status changed successfully")
+            return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
-                    .answer(internshipRepoInter
-                                    .changeStatusForInternship(internshipId))
-                    .build();
+                    .body(internshipRepoInter
+                                    .changeStatusForInternship(internshipId));
         }
         catch (Exception e){
             e.getStackTrace();
             log.info("Service: InternshipService, method: changeStatusForInternship");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
-                    .status(HttpStatus.valueOf(501))
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
         }
     }
 

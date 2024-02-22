@@ -5,11 +5,12 @@ import com.example.junior_portal.data.repository.InternshipRepository;
 import com.example.junior_portal.model.Internship;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class InternshipRepoInterImpl implements InternshipRepoInter {
 

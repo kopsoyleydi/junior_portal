@@ -74,32 +74,28 @@ public class UserService implements UserDetailsService {
 
 
 
-    public CommonResponse changeUserPassword(PassChange passChange){
+    public ResponseEntity<?> changeUserPassword(PassChange passChange){
         try {
             User user = userRepoInter.getUserByEmail(passChange.getUserEmail());
             if(user!=null){
                 if(passChange.getPassword().equals(passChange.getRepeatPassword())){
                     userRepoInter.updatePassword(passChange.getUserEmail(),
                             passwordEncoder.encode(passChange.getPassword()));
-                    return CommonResponse.builder()
-                            .message("Password change success")
+                    return ResponseEntity
                             .status(HttpStatus.OK).build();
                 }
                 else {
-                    return CommonResponse.builder()
-                            .message("Пароли не совподают")
-                            .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST).build();
                 }
             }
-            return CommonResponse.builder()
-                    .message("Пользователь не найден")
+            return ResponseEntity
                     .status(HttpStatus.NOT_FOUND).build();
 
         }
         catch (Exception e){
             log.info("Service: UserService, method: changeUserPassword");
-            return CommonResponse.builder()
-                    .message("Something went wrong")
+            return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
