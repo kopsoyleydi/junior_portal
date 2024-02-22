@@ -21,6 +21,7 @@ public class UniversityApiBody {
 
     String name;
 
-    List<String> web_pages;
+    List<String> webPages;
+
     String country;
 }
