@@ -1,6 +1,5 @@
 package com.example.junior_portal.dtos.dto.adress;
 
-import com.example.junior_portal.model.address.City;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
