@@ -6,10 +6,8 @@ import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.mapper.UserMapper;
 import com.example.junior_portal.dtos.bodies.request.PassChange;
 import com.example.junior_portal.dtos.bodies.request.RegistrationBody;
-import com.example.junior_portal.dtos.bodies.response.CurrentUser;
-import com.example.junior_portal.dtos.response.CommonResponse;
+import com.example.junior_portal.dtos.dto.UserDto;
 import com.example.junior_portal.model.Permission;
-import com.example.junior_portal.model.Profile;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -104,8 +102,10 @@ public class UserService implements UserDetailsService {
         token = token.replace("Bearer ", "");
         String email = jwtTokenUtil.extractUsername(token);
         try {
+
             User user = userRepoInter.getUserByEmail(email);
-            return ResponseEntity.ok(user);
+            UserDto userDto = userMapper.toDto(user);
+            return ResponseEntity.ok(userDto);
         }
         catch (Exception e){
             log.info("Service: UserService, method: getCurrentUser");

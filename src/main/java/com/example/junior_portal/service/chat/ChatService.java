@@ -9,7 +9,6 @@ import com.example.junior_portal.dtos.bodies.request.FindMessage;
 import com.example.junior_portal.dtos.bodies.request.MessageBody;
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.dtos.bodies.request.UpdateStatuses;
-import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;

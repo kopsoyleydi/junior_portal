@@ -3,7 +3,6 @@ package com.example.junior_portal.service.portal;
 import com.example.junior_portal.data.impl.inter.InternshipRepoInter;
 import com.example.junior_portal.data.mapper.InternshipMapper;
 import com.example.junior_portal.dtos.dto.InternshipDto;
-import com.example.junior_portal.dtos.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
