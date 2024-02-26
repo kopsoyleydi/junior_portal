@@ -40,7 +40,7 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests
-                        (a -> a.requestMatchers("/**").permitAll()
+                        (a -> a
                                 .requestMatchers("/basic/**").permitAll()
                                 .requestMatchers("/api/**").authenticated())
 

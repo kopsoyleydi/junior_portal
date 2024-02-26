@@ -10,7 +10,6 @@ import lombok.Data;
 public class Internship {
 
     @Id
-    @Column(name = "internship_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
