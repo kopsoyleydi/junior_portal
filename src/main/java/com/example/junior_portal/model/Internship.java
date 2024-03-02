@@ -27,4 +27,7 @@ public class Internship {
 
     @Column(name = "end_date")
     private String endDate;
+
+    @Column(name = "linktopicture")
+    private String linktopicture;
 }

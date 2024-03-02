@@ -17,4 +17,6 @@ public class InternshipDto {
     private String endDate;
 
     private Boolean active;
+
+    private String linktopicture;
 }
