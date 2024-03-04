@@ -5,7 +5,6 @@ import com.example.junior_portal.data.repository.ProfileRepository;
 import com.example.junior_portal.model.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @RequiredArgsConstructor

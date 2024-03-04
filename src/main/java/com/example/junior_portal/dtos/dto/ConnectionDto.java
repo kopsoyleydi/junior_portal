@@ -1,7 +1,6 @@
 package com.example.junior_portal.dtos.dto;
 
-import com.example.junior_portal.enums.ConnectionType;
-import com.example.junior_portal.model.User;
+import com.example.junior_portal.enums.UserType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -19,5 +18,5 @@ public class ConnectionDto {
     private UserDto user2Id;
 
     @Enumerated
-    private ConnectionType connectionType;
+    private UserType userType;
 }

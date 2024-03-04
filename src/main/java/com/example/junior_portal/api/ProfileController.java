@@ -1,7 +1,6 @@
 package com.example.junior_portal.api;
 
 import com.example.junior_portal.dtos.dto.ProfileDto;
-import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.service.portal.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

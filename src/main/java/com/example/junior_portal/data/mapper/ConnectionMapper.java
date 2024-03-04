@@ -16,7 +16,7 @@ public class ConnectionMapper {
     public ConnectionDto toDto(Connection connection){
         ConnectionDto connectionDto = new ConnectionDto();
         connectionDto.setId(connection.getId());
-        connectionDto.setConnectionType(connection.getConnectionType());
+        connectionDto.setUserType(connection.getUserType());
         connectionDto.setUser1Id(userMapper.toDto(connection.getUser1Id()));
         connectionDto.setUser2Id(userMapper.toDto(connection.getUser2Id()));
         return connectionDto;
@@ -25,7 +25,7 @@ public class ConnectionMapper {
     public Connection toModel(ConnectionDto connectionDto){
         Connection connection = new Connection();
         connection.setId(connectionDto.getId());
-        connection.setConnectionType(connectionDto.getConnectionType());
+        connection.setUserType(connectionDto.getUserType());
         connection.setUser1Id(userMapper.toModel(connectionDto.getUser1Id()));
         connection.setUser2Id(userMapper.toModel(connectionDto.getUser2Id()));
         return connection;

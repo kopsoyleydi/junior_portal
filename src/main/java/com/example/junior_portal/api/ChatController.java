@@ -1,7 +1,6 @@
 package com.example.junior_portal.api;
 
 import com.example.junior_portal.dtos.bodies.request.*;
-import com.example.junior_portal.dtos.response.CommonResponse;
 import com.example.junior_portal.service.chat.ChatRoomService;
 import com.example.junior_portal.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,6 @@ import com.example.junior_portal.data.repository.ConnectionRepository;
 import com.example.junior_portal.model.Connection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @RequiredArgsConstructor

@@ -1,7 +1,6 @@
 package com.example.junior_portal.enums;
 
-public enum ConnectionType {
+public enum UserType {
     RECRUITER,
     USER,
-
 }

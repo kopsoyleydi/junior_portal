@@ -5,7 +5,6 @@ import com.example.junior_portal.data.repository.ChatRoomRepository;
 import com.example.junior_portal.model.chat.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 
 

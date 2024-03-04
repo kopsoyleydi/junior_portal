@@ -1,6 +1,6 @@
 package com.example.junior_portal.model;
 
-import com.example.junior_portal.enums.ConnectionType;
+import com.example.junior_portal.enums.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +23,6 @@ public class Connection {
     private User user2Id;
 
     @Enumerated
-    private ConnectionType connectionType;
+    private UserType userType;
 
 }
