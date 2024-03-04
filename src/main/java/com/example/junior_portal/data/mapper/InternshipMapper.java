@@ -1,14 +1,19 @@
 package com.example.junior_portal.data.mapper;
 
+import com.example.junior_portal.data.mapper.companies.CompaniesMapper;
 import com.example.junior_portal.dtos.dto.InternshipDto;
 import com.example.junior_portal.model.Internship;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class InternshipMapper {
+
+    private final CompaniesMapper companiesMapper;
     public InternshipDto toDto(Internship internship){
         InternshipDto internshipDto = new InternshipDto();
         internshipDto.setId(internshipDto.getId());
@@ -18,6 +23,7 @@ public class InternshipMapper {
         internshipDto.setStartDate(internship.getStartDate());
         internshipDto.setEndDate(internship.getEndDate());
         internshipDto.setLinktopicture(internship.getLinktopicture());
+        internshipDto.setCompaniesDto(companiesMapper.toDto(internship.getCompanies()));
         return internshipDto;
     };
 
@@ -30,6 +36,7 @@ public class InternshipMapper {
         internship.setStartDate(internshipDto.getStartDate());
         internship.setEndDate(internshipDto.getEndDate());
         internship.setLinktopicture(internshipDto.getLinktopicture());
+        internship.setCompanies(companiesMapper.toModel(internshipDto.getCompaniesDto()));
         return internship;
     };
 

@@ -1,5 +1,6 @@
 package com.example.junior_portal.model;
 
+import com.example.junior_portal.model.company.Companies;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,4 +31,7 @@ public class Internship {
 
     @Column(name = "linktopicture")
     private String linktopicture;
+
+    @OneToOne
+    private Companies companies;
 }
