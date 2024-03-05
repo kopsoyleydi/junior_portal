@@ -1,6 +1,7 @@
 package com.example.junior_portal.dtos.dto;
 
 import com.example.junior_portal.model.company.Companies;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class InternshipDto {
     private Boolean active;
 
     private String linktopicture;
-    @OneToOne
+
+    @ManyToOne
     private CompaniesDto companiesDto;
 }

@@ -32,6 +32,6 @@ public class Internship {
     @Column(name = "linktopicture")
     private String linktopicture;
 
-    @OneToOne
+    @ManyToOne
     private Companies companies;
 }
