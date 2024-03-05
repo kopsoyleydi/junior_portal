@@ -5,18 +5,18 @@ import com.example.junior_portal.service.chat.ChatRoomService;
 import com.example.junior_portal.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/chat")
 public class ChatController {
 
     private final ChatService chatService;
 
     private final ChatRoomService chatRoomService;
 
-    @PostMapping("/process")
+    @MessageMapping("/process")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody MessageBody messageBody){
         return chatService.processMessaging(messageBody);
     }
