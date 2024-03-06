@@ -6,6 +6,8 @@ import com.example.junior_portal.model.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class ProfileRepoInterImpl implements ProfileRepoInter {
@@ -24,5 +26,10 @@ public class ProfileRepoInterImpl implements ProfileRepoInter {
     @Override
     public Profile changeProfile(Profile profile) {
         return profileRepository.save(profile);
+    }
+
+    @Override
+    public List<Profile> getAllProfiles() {
+        return profileRepository.findAll();
     }
 }
