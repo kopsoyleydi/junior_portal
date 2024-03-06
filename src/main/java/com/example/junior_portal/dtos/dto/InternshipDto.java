@@ -24,5 +24,5 @@ public class InternshipDto {
     private String linktopicture;
 
     @ManyToOne
-    private CompaniesDto companiesDto;
+    private CompaniesDto companiesid;
 }

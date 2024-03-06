@@ -23,7 +23,7 @@ public class InternshipMapper {
         internshipDto.setStartDate(internship.getStartDate());
         internshipDto.setEndDate(internship.getEndDate());
         internshipDto.setLinktopicture(internship.getLinktopicture());
-        internshipDto.setCompaniesDto(companiesMapper.toDto(internship.getCompanies()));
+        internshipDto.setCompaniesid(companiesMapper.toDto(internship.getCompanies()));
         return internshipDto;
     };
 
@@ -36,7 +36,7 @@ public class InternshipMapper {
         internship.setStartDate(internshipDto.getStartDate());
         internship.setEndDate(internshipDto.getEndDate());
         internship.setLinktopicture(internshipDto.getLinktopicture());
-        internship.setCompanies(companiesMapper.toModel(internshipDto.getCompaniesDto()));
+        internship.setCompanies(companiesMapper.toModel(internshipDto.getCompaniesid()));
         return internship;
     };
 
