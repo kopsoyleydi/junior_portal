@@ -13,4 +13,8 @@ public class RegistrationBody {
     private String email;
 
     private String password;
+
+    private Long roleId;
+
+    private String pictureLink;
 }
