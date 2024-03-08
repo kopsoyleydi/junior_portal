@@ -21,15 +21,15 @@ public class ChatController {
         return chatService.processMessaging(messageBody);
     }
 
-    @GetMapping("/countNewMessage")
-    public ResponseEntity<?> countNewMessageFromChat(@RequestParam("senderId") Long senderId,
-                                                  @RequestParam ("recipientId") Long recipientId){
+    @GetMapping("api/messages/{senderId}/{recipientId}/count")
+    public ResponseEntity<?> countNewMessageFromChat(@PathVariable("senderId") Long senderId,
+                                                  @PathVariable ("recipientId") Long recipientId){
         return chatService.countNewMessages(new NewMessage(senderId, recipientId));
     }
 
-    @GetMapping("/findMessagesOnChat")
-    public ResponseEntity<?> findMessagesOnChat(@RequestParam("senderId") Long senderId,
-                                             @RequestParam ("recipientId") Long recipientId){
+    @GetMapping("api/messages/findMessagesOnChat/{senderId}/{recipientId}")
+    public ResponseEntity<?> findMessagesOnChat(@PathVariable("senderId") Long senderId,
+                                             @PathVariable ("recipientId") Long recipientId){
         return chatService.findChatMessages(new FindMessage(senderId, recipientId));
     }
 
