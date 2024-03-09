@@ -9,9 +9,9 @@ import java.util.Date;
 @Setter
 public class MessageBody {
 
-    private String senderEmail;
+    private Long senderId;
 
-    private String recipientEmail;
+    private Long recipientId;
 
     private String content;
 

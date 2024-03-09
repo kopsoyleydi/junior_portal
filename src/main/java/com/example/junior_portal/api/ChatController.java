@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class ChatController {
 
     private final ChatService chatService;
@@ -22,7 +24,7 @@ public class ChatController {
     }
 
     @GetMapping("api/messages/{senderId}/{recipientId}/count")
-    public ResponseEntity<?> countNewMessageFromChat(@PathVariable("senderId") Long senderId,
+    public int countNewMessageFromChat(@PathVariable("senderId") Long senderId,
                                                   @PathVariable ("recipientId") Long recipientId){
         return chatService.countNewMessages(new NewMessage(senderId, recipientId));
     }

@@ -113,4 +113,14 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.internalServerError().body("Something went wrong");
         }
     }
+
+    public ResponseEntity<?> findAllUsers(){
+        try{
+            return ResponseEntity.ok(userRepoInter.findAllUsers());
+        }
+        catch (Exception e){
+            log.info("Service: UserService, method: findAllUsers");
+            return ResponseEntity.internalServerError().body("Something went wrong");
+        }
+    }
 }

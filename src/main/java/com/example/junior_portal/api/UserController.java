@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -21,5 +22,10 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token){
         return userService.getCurrentUser(token);
+    }
+
+    @GetMapping("/allusers")
+    public ResponseEntity<?> getUsers(){
+        return userService.findAllUsers();
     }
 }

@@ -6,6 +6,8 @@ import com.example.junior_portal.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class UserRepoInterImpl implements UserRepoInter {
@@ -14,6 +16,16 @@ public class UserRepoInterImpl implements UserRepoInter {
     @Override
     public User createUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findAllById(id);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override

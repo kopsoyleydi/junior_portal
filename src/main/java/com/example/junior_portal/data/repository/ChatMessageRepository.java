@@ -16,8 +16,8 @@ import java.util.List;
 @Transactional
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
-    List<ChatMessage> countBySenderIdAndRecipientIdAndStatus(
-            Long senderId, Long recipientId, MessageStatus status);
+    int countBySenderIdAndRecipientId(
+            Long senderId, Long recipientId);
 
     List<ChatMessage> findByChatId(Long chatId);
 

@@ -70,10 +70,9 @@ public class ChatService {
 
     private ChatMessage setterChatMessage(MessageBody messageBody) {
         ChatMessage chatMessage = new ChatMessage();
-        User sender = userRepoInter.getUserByEmail(messageBody.getSenderEmail());
-        chatMessage.setSenderId(sender.getId());
-        chatMessage.setSenderName(sender.getUsername());
-        User recipient = userRepoInter.getUserByEmail(messageBody.getRecipientEmail());
+        chatMessage.setSenderId(messageBody.getSenderId());
+        chatMessage.setSenderName(userRepoInter.findById(messageBody.getSenderId()).getUsername());
+        User recipient = userRepoInter.findById(messageBody.getRecipientId());
         chatMessage.setRecipientId(recipient.getId());
         chatMessage.setRecipientName(recipient.getUsername());
         chatMessage.setContent(messageBody.getContent());
@@ -81,19 +80,14 @@ public class ChatService {
         return chatMessage;
     }
 
-    public ResponseEntity<?> countNewMessages(NewMessage newMessage) {
+    public int countNewMessages(NewMessage newMessage) {
         try {
-            List<ChatMessage> countNewMessages = chatMessageInter.countNewMessages(newMessage.getSenderId()
+            return chatMessageInter.countNewMessages(newMessage.getSenderId()
                     , newMessage.getRecipientId());
-            long countMessages = countNewMessages.size();
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("You have " + countMessages + " new " +
-                            ((countMessages > 1) ? "messages" : "message"));
         } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: countNewMessages");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Something went wrong");
+            return 0;
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("basic/reg")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RegController {
 
     private final UserAuthService userAuthService;
