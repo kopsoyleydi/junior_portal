@@ -6,19 +6,21 @@ import com.example.junior_portal.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
-
 public class ChatController {
 
     private final ChatService chatService;
 
     private final ChatRoomService chatRoomService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @MessageMapping("/process")
+    @SendTo("/user/messages")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody MessageBody messageBody){
         return chatService.processMessaging(messageBody);
     }
