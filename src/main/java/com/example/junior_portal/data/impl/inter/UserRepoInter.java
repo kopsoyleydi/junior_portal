@@ -13,6 +13,8 @@ public interface UserRepoInter {
 
     List<User> findAllUsers();
 
+    List<User> findAllUsersWithoutCurrentUsers(Long current);
+
     User changeUser(User user);
 
     User getUserByEmail(String email);

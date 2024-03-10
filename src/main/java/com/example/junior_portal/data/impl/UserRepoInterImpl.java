@@ -29,6 +29,11 @@ public class UserRepoInterImpl implements UserRepoInter {
     }
 
     @Override
+    public List<User> findAllUsersWithoutCurrentUsers(Long current) {
+        return userRepository.getAllByIdNot(current);
+    }
+
+    @Override
     public User changeUser(User user) {
         return userRepository.save(user);
     }

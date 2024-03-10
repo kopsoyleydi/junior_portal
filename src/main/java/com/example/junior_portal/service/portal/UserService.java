@@ -101,11 +101,8 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> getCurrentUser(String token){
         token = token.replace("Bearer ", "");
-        String email = jwtTokenUtil.extractUsername(token);
         try {
-
-            User user = userRepoInter.getUserByEmail(email);
-            UserDto userDto = userMapper.toDto(user);
+            UserDto userDto = currentUser(token);
             return ResponseEntity.ok(userDto);
         }
         catch (Exception e){
@@ -114,9 +111,23 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<?> findAllUsers(){
+    public UserDto currentUser(String token){
+        String email = jwtTokenUtil.extractUsername(token);
+        try {
+            User user = userRepoInter.getUserByEmail(email);
+            return userMapper.toDto(user);
+        }
+        catch (Exception e){
+            log.info("Service: UserService, method: getCurrentUser");
+            return new UserDto();
+        }
+    }
+
+    public ResponseEntity<?> findAllUsersWithoutCurrent(String token){
         try{
-            return ResponseEntity.ok(userRepoInter.findAllUsers());
+            token = token.replace("Bearer ", "");
+            UserDto userDto = currentUser(token);
+            return ResponseEntity.ok(userRepoInter.findAllUsersWithoutCurrentUsers(userDto.getId()));
         }
         catch (Exception e){
             log.info("Service: UserService, method: findAllUsers");

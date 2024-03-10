@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/allusers")
-    public ResponseEntity<?> getUsers(){
-        return userService.findAllUsers();
+    public ResponseEntity<?> getUsers(@RequestHeader("Authorization") String token){
+        return userService.findAllUsersWithoutCurrent(token);
     }
 }
