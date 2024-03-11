@@ -26,7 +26,7 @@ public class ChatController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/addChatRoom")
+    @PostMapping("api/addChatRoom")
     public ResponseEntity<?> addChatRoom(@RequestBody CreateRoom createRoom){
         return chatRoomService.createRoom(createRoom);
     }

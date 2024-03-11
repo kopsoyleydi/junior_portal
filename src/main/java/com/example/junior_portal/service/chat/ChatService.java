@@ -6,9 +6,8 @@ import com.example.junior_portal.data.impl.inter.ChatRoomRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.mapper.chat.ChatMessageMapper;
 import com.example.junior_portal.dtos.bodies.request.MessageBody;
-import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.dtos.bodies.request.UpdateStatuses;
-import com.example.junior_portal.model.User;
+
 import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
 import com.example.junior_portal.model.chat.ChatRoom;
@@ -70,6 +69,7 @@ public class ChatService {
     private ChatMessage setterChatMessage(MessageBody messageBody) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSenderId(messageBody.getSenderId());
+        chatMessage.setChatId(messageBody.getChatId());
         chatMessage.setSenderName(userRepoInter.findById(messageBody.getSenderId()).getUsername());
         chatMessage.setContent(messageBody.getContent());
         chatMessage.setTimestamp(Instant.now());

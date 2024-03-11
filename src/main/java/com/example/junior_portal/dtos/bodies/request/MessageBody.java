@@ -11,8 +11,6 @@ public class MessageBody {
 
     private Long senderId;
 
-    private Long recipientId;
-
     private Long chatId;
 
     private String content;

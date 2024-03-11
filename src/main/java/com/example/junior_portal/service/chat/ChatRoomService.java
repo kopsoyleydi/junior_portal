@@ -18,7 +18,7 @@ public class ChatRoomService {
 
     public ResponseEntity<?> createRoom(CreateRoom createRoom){
         try {
-            if(createRoom.getMessage() == null) {
+            if(createRoom.getRecipientId() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("User should send message");
             }

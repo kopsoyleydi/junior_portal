@@ -10,5 +10,4 @@ public class CreateRoom {
 
     private Long recipientId;
 
-    private String message;
 }
