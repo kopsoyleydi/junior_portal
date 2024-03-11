@@ -18,9 +18,7 @@ public class ChatMessageMapper {
         chatMessageDto.setId(chatMessage.getId());
         chatMessageDto.setContent(chatMessage.getContent());
         chatMessageDto.setSenderId(chatMessage.getSenderId());
-        chatMessageDto.setRecipientId(chatMessage.getRecipientId());
         chatMessageDto.setSenderName(chatMessage.getSenderName());
-        chatMessageDto.setRecipientName(chatMessage.getRecipientName());
         chatMessageDto.setStatus(chatMessage.getStatus());
         chatMessageDto.setTimestamp(Instant.now());
         return chatMessageDto;
@@ -31,9 +29,7 @@ public class ChatMessageMapper {
         chatMessage.setId(chatMessageDto.getId());
         chatMessage.setContent(chatMessageDto.getContent());
         chatMessage.setSenderId(chatMessageDto.getSenderId());
-        chatMessage.setRecipientId(chatMessageDto.getRecipientId());
         chatMessage.setSenderName(chatMessageDto.getSenderName());
-        chatMessage.setRecipientName(chatMessageDto.getRecipientName());
         chatMessage.setStatus(chatMessageDto.getStatus());
         chatMessage.setTimestamp(Instant.now());
         return chatMessage;

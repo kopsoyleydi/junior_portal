@@ -26,20 +26,19 @@ public class ChatMessageInterImpl implements ChatMessageRepoInter {
     }
 
     @Override
-    public int countNewMessages(Long senderId, Long recipientId) {
+    public int countNewMessages(Long chatId) {
         return chatMessageRepository
-                .countBySenderIdAndRecipientIdAndStatus(senderId, recipientId, MessageStatus.RECEIVED);
+                .countByIdAndStatus(chatId, MessageStatus.RECEIVED);
     }
 
     @Override
-    public List<ChatMessage> findChatMessages(Long senderId, Long recipientId) {
-         ChatRoom chat = chatRoomInter.getChatRoom(senderId, recipientId);
-         Long chatId = chat.getChatId();
+    public List<ChatMessage> findChatMessages(Long chatId) {
+         ChatRoom chat = chatRoomInter.getChatRoom(chatId);
         List<ChatMessage> messages =
-                chatMessageRepository.findByChatId(chatId);
+                chatMessageRepository.findAllByChatId(chatId);
 
         if(!messages.isEmpty()) {
-            updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
+            updateStatuses(chat.getSenderId(), chat.getRecipientId(), MessageStatus.DELIVERED);
         }
 
         return messages;

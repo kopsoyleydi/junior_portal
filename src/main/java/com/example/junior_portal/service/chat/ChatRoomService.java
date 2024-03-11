@@ -23,7 +23,7 @@ public class ChatRoomService {
                         .body("User should send message");
             }
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(chatRoomRepoInter.getChatRoom(createRoom.getSenderId(), createRoom.getRecipientId()));
+                    .body(chatRoomRepoInter.addChatRoom(createRoom.getSenderId(), createRoom.getRecipientId()));
         }
         catch (Exception e){
             log.info("Service: ChatRoomService, create room method");

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     ChatRoom findBySenderIdAndRecipientId(Long senderId, Long recipientId);
 
+    ChatRoom findAllById(Long chatId);
     @Query(value = "select max(s.id) from ChatRoom s")
     Long maxId();
 }

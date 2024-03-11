@@ -25,16 +25,20 @@ public class ChatController {
         return chatService.processMessaging(messageBody);
     }
 
-    @GetMapping("api/messages/{senderId}/{recipientId}/count")
-    public int countNewMessageFromChat(@PathVariable("senderId") Long senderId,
-                                                  @PathVariable ("recipientId") Long recipientId){
-        return chatService.countNewMessages(new NewMessage(senderId, recipientId));
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/addChatRoom")
+    public ResponseEntity<?> addChatRoom(@RequestBody CreateRoom createRoom){
+        return chatRoomService.createRoom(createRoom);
     }
 
-    @GetMapping("api/messages/findMessagesOnChat/{senderId}/{recipientId}")
-    public ResponseEntity<?> findMessagesOnChat(@PathVariable("senderId") Long senderId,
-                                             @PathVariable ("recipientId") Long recipientId){
-        return chatService.findChatMessages(new FindMessage(senderId, recipientId));
+    @GetMapping("api/messages/{chatId}/count")
+    public int countNewMessageFromChat(@PathVariable("chatId") Long chatId){
+        return chatService.countNewMessages(chatId);
+    }
+
+    @GetMapping("api/messages/findMessagesOnChat/{chatId}")
+    public ResponseEntity<?> findMessagesOnChat(@PathVariable ("chatId") Long chatId){
+        return chatService.findChatMessages(chatId);
     }
 
     @PutMapping("/updateStatus")

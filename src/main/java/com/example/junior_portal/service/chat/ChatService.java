@@ -5,13 +5,13 @@ import com.example.junior_portal.data.impl.inter.ChatMessageRepoInter;
 import com.example.junior_portal.data.impl.inter.ChatRoomRepoInter;
 import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.mapper.chat.ChatMessageMapper;
-import com.example.junior_portal.dtos.bodies.request.FindMessage;
 import com.example.junior_portal.dtos.bodies.request.MessageBody;
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.dtos.bodies.request.UpdateStatuses;
 import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
+import com.example.junior_portal.model.chat.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,14 +39,13 @@ public class ChatService {
 
     public ResponseEntity<?> processMessaging(MessageBody messageBody) {
         ChatMessage chatMessage = setterChatMessage(messageBody);
-        chatMessage.setChatId(chatRoomRepoInter
-                .getChatRoom(chatMessage.getSenderId(), chatMessage.getRecipientId()).getChatId());
-
-        ChatMessage saved = chatMessageInter.create(chatMessage);
-
+        ChatRoom chatRoom = chatRoomRepoInter.getChatRoom(messageBody.getChatId());
+        List<ChatMessage> messages = chatRoom.getMessages();
+        messages.add(chatMessage);
+        chatRoom.setMessages(messages);
         messagingTemplate.convertAndSendToUser(String.valueOf(
-                chatMessage.getRecipientId()), "/queue/messages",
-                new ChatNotification(saved.getId(), saved.getSenderId(), saved.getSenderName()));
+                chatRoom.getId()), "/queue/messages",
+                new ChatNotification(chatRoom.getId()));
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body("Message send success");
@@ -72,18 +71,14 @@ public class ChatService {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSenderId(messageBody.getSenderId());
         chatMessage.setSenderName(userRepoInter.findById(messageBody.getSenderId()).getUsername());
-        User recipient = userRepoInter.findById(messageBody.getRecipientId());
-        chatMessage.setRecipientId(recipient.getId());
-        chatMessage.setRecipientName(recipient.getUsername());
         chatMessage.setContent(messageBody.getContent());
         chatMessage.setTimestamp(Instant.now());
         return chatMessage;
     }
 
-    public int countNewMessages(NewMessage newMessage) {
+    public int countNewMessages(Long chatId) {
         try {
-            return chatMessageInter.countNewMessages(newMessage.getSenderId()
-                    , newMessage.getRecipientId());
+            return chatMessageInter.countNewMessages(chatId);
         } catch (Exception e) {
             e.getStackTrace();
             log.info("Service: ChatService, method: countNewMessages");
@@ -91,12 +86,30 @@ public class ChatService {
         }
     }
 
-    public ResponseEntity<?> findChatMessages(FindMessage findMessage) {
+    public ResponseEntity<?> findChatAndCreateRoomMessages(Long chatId, Long user1, Long user2) {
         try {
-            List<ChatMessage> messages = chatMessageInter.findChatMessages(
-                    findMessage.getSenderId(),
-                    findMessage.getRecipientId()
-            );
+
+            ChatRoom chatRoom = chatRoomRepoInter.addChatRoom(user1, user2);
+
+            List<ChatMessage> messages = chatRoom.getMessages();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(chatMessageMapper.toDtoList(messages));
+        } catch (Exception e) {
+            log.info("Service: ChatService, method: findChatMessages");
+            e.getStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong");
+        }
+    }
+
+    public ResponseEntity<?> findChatMessages(Long chatId) {
+        try {
+
+            ChatRoom chatRoom = chatRoomRepoInter.getChatRoom(chatId);
+
+            List<ChatMessage> messages = chatRoom.getMessages();
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(chatMessageMapper.toDtoList(messages));

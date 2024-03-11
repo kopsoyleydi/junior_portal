@@ -15,21 +15,28 @@ public class ChatRoomInterImpl implements ChatRoomRepoInter {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public ChatRoom getChatRoom(Long senderId, Long recipientId) {
-        ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
+    public ChatRoom addChatRoom(Long user1, Long user2) {
+        ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndRecipientId(user1, user2);
+        ChatRoom chatRoom1 = chatRoomRepository.findBySenderIdAndRecipientId(user2, user1);
 
-        Long chatId = chatRoomRepository.maxId();
-        if(chatRoom == null){
+        if(chatRoom == null && chatRoom1 == null){
             ChatRoom room = ChatRoom
                     .builder()
-                    .chatId(chatId)
-                    .senderId(senderId)
-                    .recipientId(recipientId)
+                    .senderId(user1)
+                    .recipientId(user2)
                     .build();
 
             chatRoomRepository.save(room);
         }
-        return chatRoomRepository
-                .findBySenderIdAndRecipientId(senderId, recipientId);
+        return chatRoomRepository.findBySenderIdAndRecipientId(user1, user2);
+    }
+
+    public ChatRoom getChatRoom(Long chatId) {
+        return chatRoomRepository.findAllById(chatId);
+    }
+
+    @Override
+    public ChatRoom saveMessages(ChatRoom chatRoom) {
+        return chatRoomRepository.save(chatRoom);
     }
 }

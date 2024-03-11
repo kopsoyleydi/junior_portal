@@ -9,9 +9,9 @@ public interface ChatMessageRepoInter {
 
     ChatMessage create(ChatMessage chatMessage);
 
-    int countNewMessages(Long senderId, Long recipientId);
+    int countNewMessages(Long chatId);
 
-    List<ChatMessage> findChatMessages(Long senderId, Long recipientId);
+    List<ChatMessage> findChatMessages(Long chatId);
 
     ChatMessage findById(Long id);
 

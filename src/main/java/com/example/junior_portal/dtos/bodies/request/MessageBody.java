@@ -13,6 +13,8 @@ public class MessageBody {
 
     private Long recipientId;
 
+    private Long chatId;
+
     private String content;
 
     private Date timestamp;

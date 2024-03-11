@@ -14,14 +14,12 @@ public class ChatRoomMapper {
     public ChatRoomDto toDto(ChatRoom chatRoom){
         return ChatRoomDto.builder()
                 .id(chatRoom.getId())
-                .chatId(chatRoom.getChatId())
                 .recipientId(chatRoom.getRecipientId())
                 .build();
     };
 
     public ChatRoom toModel(ChatRoomDto chatRoomDto){
         return ChatRoom.builder()
-                .chatId(chatRoomDto.getChatId())
                 .id(chatRoomDto.getId())
                 .recipientId(chatRoomDto.getRecipientId())
                 .senderId(chatRoomDto.getSenderId())
