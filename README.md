@@ -17,3 +17,5 @@
 - ✅ Follows SOLID principles for maintainability
 ### Front написан на Js, HTML, CSS и на React
 
+### Firebase для отправки push-уводемлении 
+
