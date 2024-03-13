@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class UniversityAPI {
 
-    public ResponseEntity<UniversityApiBody[]> getUniversities(String name, String country){
+    public ResponseEntity<UniversityApiBody[]> findUniversitiesByNameAndCountry(String name, String country){
 
         String url = "http://universities.hipolabs.com?name=" + name + "&country=" + country;
 

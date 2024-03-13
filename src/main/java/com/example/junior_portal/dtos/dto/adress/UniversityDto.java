@@ -4,19 +4,21 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 public class UniversityDto {
 
-    private Long id;
-    private String name;
+    String alpha_two_code;
 
-    private String webSite;
+    String state_province;
 
-    @OneToOne
-    private CityDto city;
+    List<String> domains;
 
-    private String street;
+    String name;
 
-    private String buildingNumber;
+    List<String> webPages;
+
+    String country;
 }
