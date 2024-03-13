@@ -16,23 +16,19 @@ public class UniversityMapper {
 
     public UniversityDto toDto(University university){
         UniversityDto universityDto = new UniversityDto();
-        universityDto.setCity(universityDto.getCity());
-        universityDto.setStreet(universityDto.getStreet());
-        universityDto.setWebSite(universityDto.getWebSite());
-        universityDto.setBuildingNumber(universityDto.getBuildingNumber());
-        universityDto.setName(universityDto.getName());
-        universityDto.setId(university.getId());
+        universityDto.setName(university.getName());
+        universityDto.setCountry(university.getCountry());
+        universityDto.setAlpha_two_code(university.getAlpha_two_code());
+        universityDto.setState_province(university.getState_province());
         return universityDto;
     };
 
     public University toModel(UniversityDto universityDto){
         University university = new University();
-        university.setCity(university.getCity());
-        university.setStreet(universityDto.getStreet());
-        university.setWebSite(universityDto.getWebSite());
-        university.setBuildingNumber(universityDto.getBuildingNumber());
         university.setName(universityDto.getName());
-        university.setId(university.getId());
+        university.setCountry(universityDto.getCountry());
+        university.setAlpha_two_code(universityDto.getAlpha_two_code());
+        university.setState_province(universityDto.getState_province());
         return university;
     };
 
