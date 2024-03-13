@@ -1,4 +1,4 @@
-package com.example.junior_portal.data.impl;
+package com.example.junior_portal.data.impl.news;
 
 import com.example.junior_portal.data.impl.inter.news.NewsRepoInter;
 import com.example.junior_portal.data.repository.NewsRepository;
