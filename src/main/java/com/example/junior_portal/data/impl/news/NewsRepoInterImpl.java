@@ -3,12 +3,15 @@ package com.example.junior_portal.data.impl.news;
 import com.example.junior_portal.data.impl.inter.news.NewsRepoInter;
 import com.example.junior_portal.data.repository.NewsRepository;
 import com.example.junior_portal.model.News;
+import com.example.junior_portal.util.filter.FilterUtilForNews;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +26,12 @@ public class NewsRepoInterImpl implements NewsRepoInter {
     @Override
     public News updateNews(News news) {
         return newsRepository.save(news);
+    }
+
+    @Override
+    public List<News> selectNewsByFilter(FilterUtilForNews filterUtilForNews) {
+        return newsRepository.findAllByFilter(filterUtilForNews.getTitle(),
+                filterUtilForNews.getCreated_at().toString(), filterUtilForNews.getDescription());
     }
 
     @Override

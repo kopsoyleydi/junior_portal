@@ -22,4 +22,6 @@ public class NewsService {
             return ResponseEntity.internalServerError().body("Something went wrong");
         }
     }
+
+
 }
