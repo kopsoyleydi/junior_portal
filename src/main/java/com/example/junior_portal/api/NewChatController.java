@@ -1,6 +1,7 @@
 package com.example.junior_portal.api;
 
 import com.example.junior_portal.dtos.bodies.request.MessageBody;
+import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.dtos.dto.chat.MessageDto;
 import com.example.junior_portal.service.chat.ChatService;
 import com.example.junior_portal.service.chat.ChatsService;
@@ -25,8 +26,8 @@ public class NewChatController {
     @CrossOrigin(origins = "http://localhost:3000")
     @MessageMapping("/send/message")
     @SendTo("/user/messages")
-    public ResponseEntity<?> chatProcessMessaging(@RequestBody MessageDto messageDto){
-        return messageService.processMessaging(messageDto);
+    public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
+        return messageService.processMessaging(newMessage);
     }
 
 

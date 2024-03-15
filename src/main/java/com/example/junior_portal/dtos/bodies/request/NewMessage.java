@@ -15,11 +15,9 @@ import java.time.LocalDateTime;
 public class NewMessage {
     private Long id;
 
-    private UserDto message_from;
+    private Long message_from;
 
-    private UserDto message_to;
+    private Long message_to;
 
     private String content;
-
-    private LocalDateTime created_at;
 }
