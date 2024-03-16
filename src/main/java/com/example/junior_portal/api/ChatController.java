@@ -26,7 +26,7 @@ public class ChatController {
     }
 
     @GetMapping("api/chat/findAllMessages/{userId}/{messageTo}")
-    public ResponseEntity<?> getAllChats(@PathVariable Long userId, @PathVariable Long messageTo){
+    public ResponseEntity<?> getAllMessagesFromChat(@PathVariable Long userId, @PathVariable Long messageTo){
         return chatsService.getAllMessagesFromChat(userId, messageTo);
     }
 

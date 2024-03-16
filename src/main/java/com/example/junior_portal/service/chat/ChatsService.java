@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public class ChatsService {
 
     private final MessageRepoInter messageRepoInter;
 
-    private ChatsMapper chatsMapper;
+    private final ChatsMapper chatsMapper;
 
     public ResponseEntity<?> loadAllChats(Long currentUserId){
         List<Message> messages = messageRepoInter.loadChats(currentUserId);
@@ -37,11 +38,12 @@ public class ChatsService {
                 usersIds.add(m.getMessage_from().getId());
             }
         }
-        List<User> users = new ArrayList<>();
+        HashSet<User> users = new HashSet<>();
         for(Long ids : usersIds){
             users.add(userRepoInter.findById(ids));
         }
-        return ResponseEntity.ok(chatsMapper.toChatsList(users));
+        List<User> userList = users.stream().toList();
+        return ResponseEntity.ok(chatsMapper.toChatsList(userList));
     }
 
     public ResponseEntity<?> countNewMessages(Long userId, Long messageTo){
