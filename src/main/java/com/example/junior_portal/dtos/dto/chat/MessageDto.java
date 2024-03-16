@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,5 +23,5 @@ public class MessageDto {
 
     private String content;
 
-    private LocalDateTime created_at;
+    private Instant created_at;
 }

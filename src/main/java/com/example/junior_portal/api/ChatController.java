@@ -1,8 +1,8 @@
 package com.example.junior_portal.api;
 
-import com.example.junior_portal.dtos.bodies.request.*;
-import com.example.junior_portal.service.chat.ChatRoomService;
-import com.example.junior_portal.service.chat.ChatService;
+import com.example.junior_portal.dtos.bodies.request.NewMessage;
+import com.example.junior_portal.service.chat.ChatsService;
+import com.example.junior_portal.service.chat.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,42 +14,33 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
 
-    private final ChatService chatService;
+    private final MessageService messageService;
 
-    private final ChatRoomService chatRoomService;
+    private final ChatsService chatsService;
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @MessageMapping("/process")
+    @MessageMapping("/send/message")
     @SendTo("/user/messages")
-    public ResponseEntity<?> chatProcessMessaging(@RequestBody MessageBody messageBody){
-        return chatService.processMessaging(messageBody);
+    public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
+        return messageService.processMessaging(newMessage);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("api/addChatRoom")
-    public ResponseEntity<?> addChatRoom(@RequestBody CreateRoom createRoom){
-        return chatRoomService.createRoom(createRoom);
+    @GetMapping("api/chat/findAllMessages/{userId}/{messageTo}")
+    public ResponseEntity<?> getAllChats(@PathVariable Long userId, @PathVariable Long messageTo){
+        return chatsService.getAllMessagesFromChat(userId, messageTo);
     }
 
-    @GetMapping("api/messages/{chatId}/count")
-    public int countNewMessageFromChat(@PathVariable("chatId") Long chatId){
-        return chatService.countNewMessages(chatId);
+    @GetMapping("api/chat/getAllChats/{userId}")
+    public ResponseEntity<?> getAllChats(@PathVariable Long userId){
+        return chatsService.loadAllChats(userId);
     }
 
-    @GetMapping("api/messages/findMessagesOnChat/{chatId}")
-    public ResponseEntity<?> findMessagesOnChat(@PathVariable ("chatId") Long chatId){
-        return chatService.findChatMessages(chatId);
+    @GetMapping("/api/chat/countNewMessages/{userId}/{messageTo}/count")
+    public ResponseEntity<?> countNewMessages(@PathVariable Long userId, @PathVariable Long messageTo){
+        return chatsService.countNewMessages(userId, messageTo);
     }
 
-    @PutMapping("/updateStatus")
-    public ResponseEntity<?> updateStatusMessages(@RequestBody UpdateStatuses updateStatuses){
-        return chatService.updateStatuses(updateStatuses);
-    }
 
-    @PostMapping("/createRoom")
-    public ResponseEntity<?> createRoom(@RequestBody CreateRoom createRoom){
-        return chatRoomService.createRoom(createRoom);
-    }
 
 
 }

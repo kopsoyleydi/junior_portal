@@ -4,12 +4,8 @@ import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.data.impl.inter.chat.MessageRepoInter;
 import com.example.junior_portal.data.mapper.chat.MessageMapper;
 import com.example.junior_portal.dtos.bodies.request.ChatRoom;
-import com.example.junior_portal.dtos.bodies.request.MessageBody;
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
-import com.example.junior_portal.dtos.dto.UserDto;
-import com.example.junior_portal.dtos.dto.chat.MessageDto;
 import com.example.junior_portal.model.User;
-import com.example.junior_portal.model.chat.ChatMessage;
 import com.example.junior_portal.model.chat.ChatNotification;
 import com.example.junior_portal.model.chat.Message;
 import com.example.junior_portal.model.chat.MessageStatus;
@@ -19,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +59,7 @@ public class MessageService {
         message.setMessage_from(messageFrom);
         message.setContent(newMessage.getContent());
         message.setStatus(MessageStatus.DELIVERED);
-        message.setCreated_at(LocalDateTime.now());
+        message.setCreated_at(Instant.now());
         return message;
     }
 

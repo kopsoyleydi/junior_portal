@@ -9,6 +9,7 @@ import com.example.junior_portal.model.User;
 import com.example.junior_portal.model.chat.Message;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ChatsService {
 
     private ChatsMapper chatsMapper;
 
-    public List<ChatsDto> loadAllChats(Long currentUserId){
+    public ResponseEntity<?> loadAllChats(Long currentUserId){
         List<Message> messages = messageRepoInter.loadChats(currentUserId);
         List<Long> usersIds = new ArrayList<>();
         for(Message m : messages){
@@ -40,6 +41,24 @@ public class ChatsService {
         for(Long ids : usersIds){
             users.add(userRepoInter.findById(ids));
         }
-        return chatsMapper.toChatsList(users);
+        return ResponseEntity.ok(chatsMapper.toChatsList(users));
+    }
+
+    public ResponseEntity<?> countNewMessages(Long userId, Long messageTo){
+        try {
+            return ResponseEntity.ok(messageRepoInter.countNewMessagesByAllChats(userId, messageTo));
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Something went wrong");
+        }
+    }
+
+    public ResponseEntity<?> getAllMessagesFromChat(Long userId, Long messageTo){
+        try {
+            return ResponseEntity.ok(messageRepoInter.currentChatMessages(userId, messageTo));
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Something went wrong");
+        }
     }
 }

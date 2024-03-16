@@ -12,4 +12,6 @@ public interface MessageRepoInter {
     List<Message> loadChats(Long userId);
 
     List<Message> currentChatMessages(Long userId, Long message_from);
+
+    int countNewMessagesByAllChats(Long userId, Long messageTo);
 }

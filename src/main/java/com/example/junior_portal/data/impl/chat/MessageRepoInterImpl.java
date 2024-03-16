@@ -27,4 +27,9 @@ public class MessageRepoInterImpl implements MessageRepoInter {
     public List<Message> currentChatMessages(Long userId, Long message_from) {
         return messageRepository.findAllMessagesByChat(userId, message_from);
     }
+
+    @Override
+    public int countNewMessagesByAllChats(Long userId, Long messageTo) {
+        return messageRepository.countAllByStatus(userId, messageTo);
+    }
 }

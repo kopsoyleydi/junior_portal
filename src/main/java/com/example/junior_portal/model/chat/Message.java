@@ -4,6 +4,7 @@ import com.example.junior_portal.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +31,7 @@ public class Message {
     private MessageStatus status;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private Instant created_at;
 
 
 }
