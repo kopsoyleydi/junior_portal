@@ -24,4 +24,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " or (c.message_to.id = :userId and c.message_from.id = :message_to and c.status = 1)")
     int countAllByStatus(Long userId, Long message_to);
 
+    @Query("select c from Message c where c.message_from.id = :userId and c.message_to.id = :message_to ")
+    Message findMessageByChat(Long userId, Long message_to);
 }

@@ -54,6 +54,14 @@ public class ChatsService {
             return ResponseEntity.internalServerError().body("Something went wrong");
         }
     }
+    public ResponseEntity<?> findChatMessageByIds(Long userId, Long messageTo){
+        try {
+            return ResponseEntity.ok(messageRepoInter.findChatMessageByIds(userId, messageTo));
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Something went wrong");
+        }
+    }
 
     public ResponseEntity<?> getAllMessagesFromChat(Long userId, Long messageTo){
         try {

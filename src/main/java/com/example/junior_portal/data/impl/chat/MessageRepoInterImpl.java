@@ -32,4 +32,9 @@ public class MessageRepoInterImpl implements MessageRepoInter {
     public int countNewMessagesByAllChats(Long userId, Long messageTo) {
         return messageRepository.countAllByStatus(userId, messageTo);
     }
+
+    @Override
+    public Message findChatMessageByIds(Long userId, Long messageTo) {
+        return messageRepository.findMessageByChat(userId, messageTo);
+    }
 }

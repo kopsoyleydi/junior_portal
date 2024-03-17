@@ -42,8 +42,7 @@ public class MessageService {
     public ResponseEntity<?> processMessaging(NewMessage newMessage) {
         Message message = setterMessage(newMessage);
         messageRepoInter.sendMessage(message);
-        messagingTemplate.convertAndSendToUser(String.valueOf(
-                        newMessage.getMessage_to()), "/queue/messages",
+        messagingTemplate.convertAndSendToUser("/user/" + newMessage.getMessage_to(), "/queue/messages",
                 new ChatNotification(newMessage.getMessage_to()));
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)

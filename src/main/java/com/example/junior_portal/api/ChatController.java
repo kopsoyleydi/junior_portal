@@ -20,7 +20,7 @@ public class ChatController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @MessageMapping("/send/message")
-    @SendTo("/user/messages")
+    @SendTo("/queue/messages")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
         return messageService.processMessaging(newMessage);
     }
@@ -38,6 +38,11 @@ public class ChatController {
     @GetMapping("/api/chat/countNewMessages/{userId}/{messageTo}/count")
     public ResponseEntity<?> countNewMessages(@PathVariable Long userId, @PathVariable Long messageTo){
         return chatsService.countNewMessages(userId, messageTo);
+    }
+
+    @GetMapping("/api/chat/findChatMessageByIds/{userId}/{messageTo}/count")
+    public ResponseEntity<?> findChatMessageByIds(@PathVariable Long userId, @PathVariable Long messageTo){
+        return chatsService.findChatMessageByIds(userId, messageTo);
     }
 
 
