@@ -6,17 +6,14 @@ import com.example.junior_portal.data.mapper.chat.MessageMapper;
 import com.example.junior_portal.dtos.bodies.request.ChatRoom;
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.model.User;
-import com.example.junior_portal.model.chat.ChatNotification;
 import com.example.junior_portal.model.chat.Message;
 import com.example.junior_portal.model.chat.MessageStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,6 @@ public class MessageService {
     private final MessageRepoInter messageRepoInter;
 
     private final MessageMapper messageMapper;
-    private final SimpMessagingTemplate messagingTemplate;
 
     private final UserRepoInter userRepoInter;
 
@@ -42,8 +38,6 @@ public class MessageService {
     public ResponseEntity<?> processMessaging(NewMessage newMessage) {
         Message message = setterMessage(newMessage);
         messageRepoInter.sendMessage(message);
-        messagingTemplate.convertAndSendToUser("/user/" + newMessage.getMessage_to(), "/queue/messages",
-                new ChatNotification(newMessage.getMessage_to()));
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body("Message send success");

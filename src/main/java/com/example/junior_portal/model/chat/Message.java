@@ -33,5 +33,7 @@ public class Message {
     @Column(name = "created_at")
     private Instant created_at;
 
+    private String type;
+
 
 }

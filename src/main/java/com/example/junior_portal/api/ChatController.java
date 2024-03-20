@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
 
     private final MessageService messageService;
 
     private final ChatsService chatsService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @MessageMapping("/send/message")
-    @SendTo("/queue/messages")
+    @PostMapping("/hello")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
         return messageService.processMessaging(newMessage);
     }
