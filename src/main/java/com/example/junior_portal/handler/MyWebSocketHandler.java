@@ -12,6 +12,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MyWebSocketHandler extends AbstractWebSocketHandler {
+public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
 
@@ -61,11 +62,9 @@ public class MyWebSocketHandler extends AbstractWebSocketHandler {
 
         String request = sessions.get(session.getId()).getUsername() + " : " + message.getPayload();
         log.info("Server received : {}", request);
+        session.sendMessage(new TextMessage("Hello, " + message + "!"));
         sendMessageToAll(request);
 
-        //String response = "Response from server to POSTMAN (" + request + ")";
-        //log.info("Server sends : {}", response);
-        //session.sendMessage(new TextMessage(response));
     }
 
     private void sendMessageToAll(String message) {

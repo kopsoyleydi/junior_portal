@@ -24,4 +24,6 @@ public class MessageDto {
     private String content;
 
     private Instant created_at;
+
+    private String type;
 }
