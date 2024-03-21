@@ -17,7 +17,7 @@ public class ChatController {
 
     private final ChatsService chatsService;
 
-    @PostMapping("/hello")
+    @MessageMapping("/topic")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
         return messageService.processMessaging(newMessage);
     }

@@ -1,5 +1,6 @@
 package com.example.junior_portal.handler;
 
+import com.example.junior_portal.dtos.dto.chat.MessageDto;
 import com.example.junior_portal.model.chat.Message;
 import com.example.junior_portal.session.UserSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,118 +23,89 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MyWebSocketHandler extends TextWebSocketHandler {
-
-    private final ObjectMapper objectMapper;
+public class MyWebSocketHandler extends AbstractWebSocketHandler {
 
     private final Map<String, UserSession> sessions = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userName = null;
         String query = session.getUri().getQuery();
-        userName = getString(userName, query);
+        userName = ChatWebSocketHandler.getString(userName, query);
 
         if (userName != null) {
             sessions.put(session.getId(), new UserSession(session, userName));
-            sendMessageToAll("User " + userName + " joined!");
-        } else {
-            session.sendMessage(new TextMessage("Error : Username is required!"));
-            session.close(new CloseStatus(4001, "Username is required"));
+            sendMessageToAll("User : " + userName + " joined");
         }
-    }
-
-    static String getString(String userName, String query) {
-        if (query != null) {
-            String[] queryParams = query.split("&");
-            for (String param : queryParams) {
-                String[] keyValue = param.split("=");
-                if (keyValue.length > 1 && "username".equals(keyValue[0])) {
-                    userName = keyValue[1];
-                    break;
-                }
-            }
-        }
-        return userName;
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
         String request = sessions.get(session.getId()).getUsername() + " : " + message.getPayload();
-        log.info("Server received : {}", request);
-        session.sendMessage(new TextMessage("Hello, " + message + "!"));
         sendMessageToAll(request);
-
-    }
-
-    private void sendMessageToAll(String message) {
-        for (UserSession userSession : sessions.values()) {
-            try {
-                userSession.getSession().sendMessage(new TextMessage(message));
-            } catch (IOException e) {
-                System.err.println("Error on sending WebSocket: " + e.getMessage());
-            }
-        }
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 
         String payload = message.getPayload().toString();
-        Message parsedMessage = parseMessage(payload);
-        if (parsedMessage != null) {
-            switch (parsedMessage.getType()) {
-                case "CHAT" -> handleChatMessage(session, parsedMessage);
-                case "COMMAND" -> handleCommand(session, parsedMessage);
-            }
-        }
-
+        MessageDto parsedMessage = parseMessage(payload);
 
     }
 
-    private Message parseMessage(String payload) {
-        try {
-            return objectMapper.readValue(payload, Message.class);
-        } catch (JsonProcessingException e) {
-            log.info("Error on parsing message: {}", e.getMessage());
-            return null;
-        }
+    private void handleChatMessage(WebSocketSession session, MessageDto message) {
+        String userName = sessions.get(session.getId()).getUsername();
+        sendMessageToAll(userName + ": " + message.getContent());
     }
 
-    private void handleChatMessage(WebSocketSession session, Message message) {
-        String username = sessions.get(session.getId()).getUsername();
-        sendMessageToAll(username + " : " + message.getContent());
-    }
-
-    private void handleCommand(WebSocketSession session, Message message) {
+    private void handleCommand(WebSocketSession session, MessageDto message) {
         switch (message.getContent()) {
             case "disconnect" -> {
                 try {
                     sessions.remove(session.getId());
                     session.close();
                 } catch (IOException e) {
-                    System.err.println("Error on closing WebSocket session" + e.getMessage());
+                    System.err.println("Error on closing WebSocket Session: " + e.getMessage());
                 }
             }
             case "listUsers" -> {
                 String activeUsers = getActiveUsers();
-                sendMessage(session, "Active users: " + activeUsers);
+                sendMessage(session, "Active users : " + activeUsers);
             }
         }
     }
 
-    private void sendMessage(WebSocketSession session, String message) {
+    private void sendMessage(WebSocketSession session, String message){
         try{
             session.sendMessage(new TextMessage(message));
         }catch (IOException e){
-            System.err.println("Error on sending WebSocket session" + e.getMessage());
+            System.err.println("Error on sending WebSocket message " + e.getMessage());
         }
     }
 
-    private String getActiveUsers() {
+    private String getActiveUsers(){
         return sessions.values().stream()
                 .map(UserSession::getUsername)
                 .collect(Collectors.joining(", "));
+    }
+
+    private MessageDto parseMessage(String payload) {
+        try {
+            return objectMapper.readValue(payload, MessageDto.class);
+        } catch (JsonProcessingException e) {
+            log.info("Error on parsing message: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void sendMessageToAll(String message) {
+        for (UserSession userSession : sessions.values()) {
+            try {
+                userSession.getSession().sendMessage(new TextMessage(message));
+            } catch (Exception e) {
+                System.err.println("Error on sending Websocket Message: " + message);
+            }
+        }
     }
 }
