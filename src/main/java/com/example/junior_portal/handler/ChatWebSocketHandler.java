@@ -16,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,12 +68,20 @@ public class ChatWebSocketHandler extends AbstractWebSocketHandler {
 
         String sender = sessions.get(session.getId()).getUsername();
         User receiver = userRepoInter.findById(newMessage.getMessage_to());
+        String json = null;
         String sessionId = usernameToSessionIdMap.get(receiver.getLogin());
         if (sessionId != null) {
             UserSession userSession = sessions.get(sessionId);
             if(userSession!=null){
                 try{
-                    userSession.getSession().sendMessage(new TextMessage(sender + " : " + newMessage.getContent()));
+                    try {
+                        json = objectMapper.writeValueAsString(messageService.processMessaging(newMessage));
+                        System.out.println(json);
+                    } catch (JsonProcessingException e) {
+                        System.err.println("Error converting object to JSON: " + e.getMessage());
+                    }
+                    assert json != null;
+                    userSession.getSession().sendMessage(new TextMessage(json));
                     System.out.println("Message sent to all" + newMessage.getContent() + " " + userSession.getUsername());
                 }catch (IOException e){
                     System.err.println("Error on sending WebSocket message " + e.getMessage());

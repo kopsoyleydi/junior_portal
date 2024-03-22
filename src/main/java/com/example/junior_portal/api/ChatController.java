@@ -18,10 +18,6 @@ public class ChatController {
 
     private final ChatsService chatsService;
 
-    @MessageMapping("/chat")
-    public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
-        return messageService.processMessaging(newMessage);
-    }
 
     @GetMapping("api/chat/findAllMessages/{userId}/{messageTo}")
     public ResponseEntity<?> getAllMessagesFromChat(@PathVariable Long userId, @PathVariable Long messageTo){

@@ -42,11 +42,9 @@ public class MessageService {
         }
     }
 
-    public ResponseEntity<?> processMessaging(NewMessage newMessage) {
+    public Message processMessaging(NewMessage newMessage) {
         Message message = setterMessage(newMessage);
-        messageRepoInter.sendMessage(message);
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body("Message send success");
+        return messageRepoInter.sendMessage(message);
     }
 
     private Message setterMessage(NewMessage newMessage){
