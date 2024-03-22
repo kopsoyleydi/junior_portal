@@ -1,6 +1,7 @@
 package com.example.junior_portal.api;
 
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
+import com.example.junior_portal.dtos.dto.chat.MessageDto;
 import com.example.junior_portal.service.chat.ChatsService;
 import com.example.junior_portal.service.chat.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class ChatController {
 
     private final ChatsService chatsService;
 
-    @MessageMapping("/topic")
+    @MessageMapping("/chat")
     public ResponseEntity<?> chatProcessMessaging(@RequestBody NewMessage newMessage){
         return messageService.processMessaging(newMessage);
     }

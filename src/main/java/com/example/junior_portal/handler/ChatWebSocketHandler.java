@@ -1,8 +1,8 @@
 package com.example.junior_portal.handler;
 
+import com.example.junior_portal.data.impl.inter.UserRepoInter;
 import com.example.junior_portal.dtos.bodies.request.NewMessage;
-import com.example.junior_portal.dtos.dto.chat.MessageDto;
-import com.example.junior_portal.model.chat.Message;
+import com.example.junior_portal.model.User;
 import com.example.junior_portal.service.chat.MessageService;
 import com.example.junior_portal.session.UserSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -29,21 +28,13 @@ public class ChatWebSocketHandler extends AbstractWebSocketHandler {
     private final Map<String, UserSession> sessions = new ConcurrentHashMap<>();
     private final Map<String, String> usernameToSessionIdMap = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
-    private final MessageService chatMessageService;
+    private final MessageService messageService;
+    private final UserRepoInter userRepoInter;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userName = null;
         String query = Objects.requireNonNull(session.getUri()).getQuery();
-        userName = getString(userName, query);
-
-        if (userName != null) {
-            sessions.put(session.getId(), new UserSession(session, userName));
-            usernameToSessionIdMap.put(userName, session.getId());
-        }
-    }
-
-    static String getString(String userName, String query) {
         if (query != null) {
             String[] queryParams = query.split("&");
             for (String param : queryParams) {
@@ -54,39 +45,35 @@ public class ChatWebSocketHandler extends AbstractWebSocketHandler {
                 }
             }
         }
-        return userName;
+
+        if (userName != null) {
+            sessions.put(session.getId(), new UserSession(session, userName));
+            System.out.println("User : " + userName + " joined" + " with session id " + session.getId());
+            usernameToSessionIdMap.put(userName, session.getId());
+        }
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String payload = message.getPayload().toString();
-        MessageDto chatCustomMessage = parseMessage(payload);
-
-        if (chatCustomMessage != null) {
-
-            handleChatMessage(session, chatCustomMessage);
-
+        NewMessage newMessage = parseMessage(payload);
+        System.out.println(newMessage.getContent());
+        if (newMessage != null) {
+            handleChatMessage(session, newMessage);
         }
     }
 
-    private void handleChatMessage(WebSocketSession session, MessageDto message) {
+    private void handleChatMessage(WebSocketSession session, NewMessage newMessage) {
 
         String sender = sessions.get(session.getId()).getUsername();
-        String receiver = message.getMessage_to().getId().toString();
-
-        NewMessage newMessage = new NewMessage();
-        newMessage.setMessage_from(sessions.get(session.getId()).getMessage_from());
-        newMessage.setMessage_to(message.getMessage_to().getId());
-        newMessage.setContent(message.getContent());
-
-        chatMessageService.processMessaging(newMessage);
-
-        String sessionId = usernameToSessionIdMap.get(receiver);
+        User receiver = userRepoInter.findById(newMessage.getMessage_to());
+        String sessionId = usernameToSessionIdMap.get(receiver.getLogin());
         if (sessionId != null) {
             UserSession userSession = sessions.get(sessionId);
             if(userSession!=null){
                 try{
-                    userSession.getSession().sendMessage(new TextMessage(sender + " : " + message.getContent()));
+                    userSession.getSession().sendMessage(new TextMessage(sender + " : " + newMessage.getContent()));
+                    System.out.println("Message sent to all" + newMessage.getContent() + " " + userSession.getUsername());
                 }catch (IOException e){
                     System.err.println("Error on sending WebSocket message " + e.getMessage());
                 }
@@ -95,12 +82,23 @@ public class ChatWebSocketHandler extends AbstractWebSocketHandler {
 
     }
 
-    private MessageDto parseMessage(String payload) {
+    private NewMessage parseMessage(String payload) {
         try {
-            return objectMapper.readValue(payload, MessageDto.class);
+            return objectMapper.readValue(payload, NewMessage.class);
         } catch (JsonProcessingException e) {
             log.info("Error on parsing message " + e.getMessage());
             return null;
+        }
+    }
+
+    private void sendMessageToAll(String message) {
+        for (UserSession userSession : sessions.values()) {
+            try {
+                userSession.getSession().sendMessage(new TextMessage(message));
+                System.out.println("Message sent to all" + message + " " + userSession.getUsername());
+            } catch (Exception e) {
+                System.err.println("Error on sending Websocket Message: " + message);
+            }
         }
     }
 }

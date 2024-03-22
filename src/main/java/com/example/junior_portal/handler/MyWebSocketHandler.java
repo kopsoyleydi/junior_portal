@@ -1,19 +1,16 @@
 package com.example.junior_portal.handler;
 
-import com.example.junior_portal.dtos.dto.chat.MessageDto;
-import com.example.junior_portal.model.chat.Message;
+import com.example.junior_portal.dtos.bodies.request.NewMessage;
 import com.example.junior_portal.session.UserSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,7 +21,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class MyWebSocketHandler extends AbstractWebSocketHandler {
-
     private final Map<String, UserSession> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
@@ -32,7 +28,16 @@ public class MyWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userName = null;
         String query = session.getUri().getQuery();
-        userName = ChatWebSocketHandler.getString(userName, query);
+        if (query != null) {
+            String[] queryParams = query.split("&");
+            for (String param : queryParams) {
+                String[] keyValue = param.split("=");
+                if (keyValue[0].equals("username") && keyValue.length > 1) {
+                    userName = keyValue[1];
+                    break;
+                }
+            }
+        }
 
         if (userName != null) {
             sessions.put(session.getId(), new UserSession(session, userName));
@@ -43,6 +48,7 @@ public class MyWebSocketHandler extends AbstractWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String request = sessions.get(session.getId()).getUsername() + " : " + message.getPayload();
+        System.out.println(message);
         sendMessageToAll(request);
     }
 
@@ -50,16 +56,22 @@ public class MyWebSocketHandler extends AbstractWebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 
         String payload = message.getPayload().toString();
-        MessageDto parsedMessage = parseMessage(payload);
+        NewMessage parsedMessage = parseMessage(payload);
 
+        if (parsedMessage != null) {
+            switch (parsedMessage.getType()) {
+                case "CHAT" -> handleChatMessage(session, parsedMessage);
+                case "COMMAND" -> handleCommand(session, parsedMessage);
+            }
+        }
     }
 
-    private void handleChatMessage(WebSocketSession session, MessageDto message) {
+    private void handleChatMessage(WebSocketSession session, NewMessage message) {
         String userName = sessions.get(session.getId()).getUsername();
         sendMessageToAll(userName + ": " + message.getContent());
     }
 
-    private void handleCommand(WebSocketSession session, MessageDto message) {
+    private void handleCommand(WebSocketSession session, NewMessage message) {
         switch (message.getContent()) {
             case "disconnect" -> {
                 try {
@@ -90,9 +102,9 @@ public class MyWebSocketHandler extends AbstractWebSocketHandler {
                 .collect(Collectors.joining(", "));
     }
 
-    private MessageDto parseMessage(String payload) {
+    private NewMessage parseMessage(String payload) {
         try {
-            return objectMapper.readValue(payload, MessageDto.class);
+            return objectMapper.readValue(payload, NewMessage.class);
         } catch (JsonProcessingException e) {
             log.info("Error on parsing message: " + e.getMessage());
             return null;
