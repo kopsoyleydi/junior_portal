@@ -34,7 +34,7 @@ public class ChatController {
         return chatsService.countNewMessages(userId, messageTo);
     }
 
-    @GetMapping("/api/chat/findChatMessageByIds/{userId}/{messageTo}/count")
+    @GetMapping("/api/chat/findChatMessageByIds/{userId}/{messageTo}")
     public ResponseEntity<?> findChatMessageByIds(@PathVariable Long userId, @PathVariable Long messageTo){
         return chatsService.findChatMessageByIds(userId, messageTo);
     }
