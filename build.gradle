@@ -39,9 +39,14 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-context-support', version: '6.1.2'
     implementation 'org.springframework.boot:spring-boot-starter-webflux:3.2.2'
     implementation 'org.slf4j:slf4j-api:2.0.9'
-   // implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'com.itextpdf:itext7-core:7.2.0' // Версия может быть изменена на последнюю
+    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '3.0.1'
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.77'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
     //implementation 'org.liquibase:liquibase-core'

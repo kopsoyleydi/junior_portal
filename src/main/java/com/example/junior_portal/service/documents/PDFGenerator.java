@@ -15,7 +15,6 @@ import java.io.OutputStream;
 @RequiredArgsConstructor
 public class PDFGenerator {
 
-    private static final String PDF_RESOURCES = "/pdf-resources/";
     private final ProfileService studentService;
 
     public File generatePdf(Profile profile) throws IOException {

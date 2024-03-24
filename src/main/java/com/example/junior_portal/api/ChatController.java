@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final MessageService messageService;
-
     private final ChatsService chatsService;
 
 
