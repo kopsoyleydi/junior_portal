@@ -100,7 +100,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getCurrentUser(String token){
-        token = token.replace("Bearer ", "");
         try {
             UserDto userDto = currentUser(token);
             return ResponseEntity.ok(userDto);
@@ -112,6 +111,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto currentUser(String token){
+        token = token.replace("Bearer ", "");
         String email = jwtTokenUtil.extractUsername(token);
         try {
             User user = userRepoInter.getUserByEmail(email);

@@ -96,7 +96,7 @@ public class EmailSender {
             return true;
         }
         catch (Exception e){
-            log.info("Exception in sendEmailWithCV");
+            log.error("Exception in sendEmailWithCV");
             e.getMessage();
             return false;
         }

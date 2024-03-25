@@ -1,6 +1,7 @@
 package com.example.junior_portal.api;
 
 import com.example.junior_portal.model.Profile;
+import com.example.junior_portal.service.portal.EmailService;
 import com.example.junior_portal.util.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/email")
 public class EmailController {
 
-    private final EmailSender emailService;
+    private final EmailService emailService;
 
-    @PostMapping("/sendCV/{email}")
-    public ResponseEntity<?> sendCV(@PathVariable String email){
-        return ResponseEntity.ok(emailService.sendEmailWithCV(email, "CV", new Profile()));
+    @PostMapping("/sendCV")
+    public ResponseEntity<?> sendCV(@RequestHeader("Authorization") String token){
+        try {
+            return ResponseEntity.ok(emailService.sendCVToEmail(token));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error while sending CV");
+        }
     }
 }
